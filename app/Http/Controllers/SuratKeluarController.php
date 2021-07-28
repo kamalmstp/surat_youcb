@@ -99,30 +99,11 @@ class SuratKeluarController extends Controller
             $nama_file = public_path('surat/tmp/Surat Edaran '.$jabatan->jabatan.' '.$sk->tgl_surat.'.docx');
             // SuratKeluar::create([
 
-            // ])
-
-            // header("Content-Disposition: attachment; filename=".$nama_file);
-            // $templateProcessor->saveAs('php://output');
-
+            // ]);
             $document->saveAs($nama_file);
             return response()->download($nama_file);
         }
     }
-
-    // public function setImageValue($search, $replace)
-    // {
-    //     // Sanity check
-    //     if (!file_exists($replace))
-    //     {
-    //         return;
-    //     }
-
-    //     // Delete current image
-    //     $this->zipClass->deleteName('surat/qr/' . $search);
-
-    //     // Add a new one
-    //     $this->zipClass->addFile($replace, 'surat/qr/' . $search);
-    // }
 
     public function createSuratKeluar(Request $request)
     {
@@ -170,9 +151,11 @@ class SuratKeluarController extends Controller
 
         } elseif (Auth::user()->isPengolah()) {
             $date = date('Y-m-d');
-            // $kd_jab = Jabatan::find($request->jabatan_id);
-            // $kd_kla = PerihalSurat::find($request->perihal_id);
-            // $no_surat = $request->no_urut.'/'.$kd_jab->kode.'/'.$kd_kla->kode.'/'.date("Y");
+            $jab = Jabatan::find($request->jabatan_id);
+            $kla = PerihalSurat::find($request->perihal_id);
+            $kd_jab = $jab->kode;
+            $kd_kla = $kla->kode;
+            $no_surat = $request->no_urut.'/'.$kd_jab->kode.'/'.$kd_kla->kode.'/'.date("Y");
             $sk->update([
                 'nama_pengolah' => Auth::user()->name,
                 'tgl_surat' => $date,
@@ -180,8 +163,9 @@ class SuratKeluarController extends Controller
                 'jabatan_id' => $request->jabatan_id,
                 'perihal_id' => $request->klasifikasi_id,
                 'kepada' => $request->kepada,
+                'perihal' => $request->perihal,
                 'isi' => $request->isi,
-                'no_surat' => 'nomor',
+                'no_surat' => $no_surat,
                 'sifat_surat' => $request->sifat_surat,
                 'lampiran' => $request->lampiran . ' lembar',
                 'isi' => $request->isi,
