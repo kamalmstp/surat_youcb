@@ -1,5 +1,5 @@
 @extends('layouts.mst')
-@section('title', 'Beranda | '.env('APP_NAME').' - Aplikasi Pengarsipan Surat dan Disposisi | Dinas Pertanian dan Ketahanan Pangan Kota Madiun')
+@section('title', 'Beranda | '.env('APP_NAME').' - Surat dan Disposisi')
 @push("styles")
     <style>
         .dataTables_filter {

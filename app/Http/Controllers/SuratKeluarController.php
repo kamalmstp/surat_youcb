@@ -6,7 +6,9 @@ use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\JenisSurat;
 use App\Models\SuratKeluar;
 use App\Models\User;
+use App\Models\Jabatan;
 use App\Support\Role;
+use App\Models\PerihalSurat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,10 +18,12 @@ class SuratKeluarController extends Controller
     {
         $keluars = SuratKeluar::orderByDesc('id')->get();
         $types = JenisSurat::all();
+        $jabatan = Jabatan::all();
         $no_urut = str_pad(SuratKeluar::count() + 1, 3, '0', STR_PAD_LEFT);
+        $klasifikasi = PerihalSurat::all();
         $findSurat = $request->q;
 
-        return view('surat.keluar', compact('keluars', 'types', 'no_urut', 'findSurat'));
+        return view('surat.keluar', compact('keluars', 'types', 'no_urut', 'klasifikasi', 'jabatan', 'findSurat'));
     }
 
     public function pdfSuratKeluar($id)
@@ -50,6 +54,57 @@ class SuratKeluarController extends Controller
 
         } elseif ($sk->jenis_id == 20) {
             return view('surat.template-sk.mou', compact('sk', 'kadin'));
+        }
+    }
+
+    public function wordSuratKeluar($id)
+    {
+        $sk = SuratKeluar::find(decrypt($id));
+
+        if($sk->jenis_id == 1){
+            $file = public_path('surat/template/edaran.docx');
+            $document = new \PhpOffice\PhpWord\TemplateProcessor($file);
+
+            $jabatan = Jabatan::find($sk->jabatan_id);
+            $klasifikasi = PerihalSurat::find($sk->perihal_id);
+
+            $qr = \QrCode::size(100)->format('png')->generate('https://youcb.ac.id');
+
+            $t1 = $jabatan->jabatan;
+            $t2 = $sk->no_urut;
+            $t3 = $jabatan->kode;
+            $t4 = $klasifikasi->kode;
+            $t5 = $sk->perihal;
+            $t6 = $sk->kepada;
+            $t7 = $sk->isi;
+            $t8 = $sk->tgl_surat;
+            $t9 = $jabatan->nama_pejabat;
+            $t10 = $jabatan->nidn;
+
+            $document->setValues(array(
+                'JABATAN' => $t1,
+                'NO_URUT' => $t2,
+                'KODE_JABATAN' => $t3,
+                'KODE_KLASIFIKASI' => $t4,
+                'TAHUN' => date("Y", strtotime($sk->tgl_surat)),
+                'TENTANG' => $t5,
+                'KEPADA' => $t6,
+                'ISI' => $t7,
+                'TANGGAL_DIBUAT' => $t8,
+                'NAMA_PEJABAT' => $t9,
+                'NIDN' => $t10,
+            ));
+
+            $nama_file = public_path('surat/tmp/Surat Edaran '.$jabatan->jabatan.' '.$sk->tgl_surat.'.docx');
+            // SuratKeluar::create([
+
+            // ])
+
+            // header("Content-Disposition: attachment; filename=".$nama_file);
+            // $templateProcessor->saveAs('php://output');
+
+            $document->saveAs($nama_file);
+            return response()->download($nama_file);
         }
     }
 
@@ -98,10 +153,19 @@ class SuratKeluarController extends Controller
             return back()->with('success', 'Surat keluar (' . $sk->getJenisSurat->jenis . ') berhasil diperbarui!');
 
         } elseif (Auth::user()->isPengolah()) {
+            $date = date('Y-m-d');
+            $kd_jab = Jabatan::find($request->jabatan_id);
+            $kd_kla = PerihalSurat::find($request->perihal_id);
+            $no_surat = $request->no_urut.'/'.$kd_jab->kode.'/'.$kd_kla->kode.'/'.date("Y");
             $sk->update([
                 'nama_pengolah' => Auth::user()->name,
-                'tgl_surat' => $request->tgl_surat,
-                'no_surat' => $request->no_surat,
+                'tgl_surat' => $date,
+                'no_urut' => $request->no_urut,
+                'jabatan_id' => $request->jabatan_id,
+                'perihal_id' => $request->klasifikasi_id,
+                'kepada' => $request->kepada,
+                'isi' => $request->isi,
+                'no_surat' => $no_surat,
                 'sifat_surat' => $request->sifat_surat,
                 'lampiran' => $request->lampiran . ' lembar',
                 'isi' => $request->isi,

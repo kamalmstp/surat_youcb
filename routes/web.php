@@ -14,6 +14,13 @@
 Route::post('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.request');
 Route::post('password/reset', 'Auth\ResetPasswordController@postReset')->name('password.reset');
 
+Route::get('qr', function () {
+    $qr = \QrCode::size(100)
+              ->generate('ID REG : 343434738474<br>Nomor Surat : 9346734idjfnfjdsfuj<br>verifikasi: https://youcb.ac.id');
+
+    echo $qr;
+  });
+
 Auth::routes();
 
 Route::group(['namespace' => 'Auth', 'prefix' => 'account'], function () {
@@ -185,6 +192,11 @@ Route::group(['prefix' => '/'], function () {
         Route::get('{id}/pdf', [
             'uses' => 'SuratKeluarController@pdfSuratKeluar',
             'as' => 'pdf.surat-keluar'
+        ]);
+
+        Route::get('{id}/word', [
+            'uses' => 'SuratKeluarController@wordSuratKeluar',
+            'as' => 'word.surat-keluar'
         ]);
 
         Route::post('create', [

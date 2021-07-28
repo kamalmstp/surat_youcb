@@ -5,8 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{env('APP_NAME')}} &mdash; Aplikasi Pengarsipan Surat dan Disposisi | Dinas Pertanian dan Ketahanan Pangan
-        Kota Madiun</title>
+    <title>{{env('APP_NAME')}} &mdash; yoUCB</title>
     <link rel="icon" href="{{asset('favicon.ico')}}" type="image/ico"/>
     <link rel="stylesheet" href="{{asset('css/bootstrap.css')}}">
     <link rel="stylesheet" href="{{asset('fonts/fontawesome-free/css/all.css')}}">
@@ -136,12 +135,12 @@
             <div class="item" style="background-image: url({{asset('images/carousels/'.$row->image)}});">
                 <div class="carousel-overlay"></div>
                 <div class="carousel-caption">
-                    <h1 class="line-1 anim-typewriter">Selamat datang di website kami APSD!</h1>
+                    <h1 class="line-1 anim-typewriter">Selamat datang di website kami</h1>
                     <a href="{{route('home')}}">
-                        <img src="{{asset('images/carousels/apsd.png')}}" class="animated fadeInLeft"
-                             alt="logo kota madiun" style="width: 100%"></a>
-                    <blockquote style="text-align: left"><h2 class="animated fadeInRight">"{{$row->captions}}"</h2>
-                    </blockquote>
+                        <img src="{{asset('images/carousels/ucb.jpg')}}" class="animated fadeInLeft"
+                             alt="logo ucb" style="width: 100%"></a>
+                    <!-- <blockquote style="text-align: left"><h2 class="animated fadeInRight">"{{$row->captions}}"</h2>
+                    </blockquote> -->
                     <button class="myBtn"></button>
                 </div>
             </div>

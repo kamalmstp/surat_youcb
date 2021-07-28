@@ -69,7 +69,7 @@
                     <div class="col-lg-8" id="recaptcha-login"></div>
                 </div>
                 <div class="row">
-                    <button id="btn_login" type="submit" class="btn btn-signin btn-block" disabled>MASUK</button>
+                    <button id="btn_login" type="submit" class="btn btn-signin btn-block">MASUK</button>
                 </div>
                 @if(session('error'))
                     <strong>{{ $errors->first('password') }}</strong>

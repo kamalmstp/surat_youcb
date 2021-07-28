@@ -1,5 +1,5 @@
 @extends('layouts.mst')
-@section('title', 'Surat Keluar | '.env('APP_NAME').' - Aplikasi Pengarsipan Surat dan Disposisi | Dinas Pertanian dan Ketahanan Pangan Kota Madiun')
+@section('title', 'Surat Keluar | '.env('APP_NAME'))
 @push("styles")
     <link href="{{asset('css/myCheckbox.css')}}" rel="stylesheet">
     <style>
@@ -250,6 +250,10 @@
                                                             ($keluar->id)])}}" target="_blank">
                                                                 <i class="fa fa-file-pdf"></i>&ensp;Lihat Surat
                                                             </a>
+                                                            <a href="{{route('word.surat-keluar', ['id' => encrypt
+                                                            ($keluar->id)])}}" target="_blank">
+                                                                <i class="fa fa-file-word"></i>&ensp;Generate Surat
+                                                            </a>
                                                         @endif
                                                     </li>
                                                 </ul>
@@ -418,22 +422,30 @@
                                     <strong>INVALID!</strong> &mdash; <span id="stats_invalid"></span>
                                 </div>
                                 <div class="row form-group">
-                                    <div class="col-lg-7 no_surat">
+                                    <div class="col-lg-7 no_urut">
+                                        <label for="no_urut">Nomor Urut <span class="required">*</span></label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-hashtag"></i></span>
+                                            <input id="no_urut" class="form-control" type="text" name="no_urut"
+                                                   placeholder="Nomor Urut">
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-lg-7 no_surat">
                                         <label for="no_surat">Nomor Surat <span class="required">*</span></label>
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="fa fa-hashtag"></i></span>
                                             <input id="no_surat" class="form-control" type="text" name="no_surat"
                                                    placeholder="kode_perihal/nomor_urut/kode_instansi/tahun" required>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-5 tgl_surat">
+                                    </div> -->
+                                    <!-- <div class="col-lg-5 tgl_surat">
                                         <label for="tgl_surat">Tanggal Surat <span class="required">*</span></label>
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="fa fa-calendar-alt"></i></span>
                                             <input id="tgl_surat" class="form-control datepicker" type="text"
                                                    name="tgl_surat" placeholder="yyyy-mm-dd" required>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
 
                                 <div class="row form-group">
@@ -469,6 +481,37 @@
                                         </div>
                                     </div>
                                 </div>
+                                
+                                <div class="row form-group">
+                                    <div class="col-lg-7 jabatan_id">
+                                        <label for="jabatan_id">Jabatan Pengirim<span class="required">*</span></label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-thumbtack"></i></span>
+                                            <select id="jabatan_id" class="form-control selectpicker"
+                                                    title="-- Pilih Jabatan --" data-live-search="true"
+                                                    name="jabatan_id" data-max-options="1" multiple required>
+                                                @foreach($jabatan as $jab)
+                                                    <option value="{{$jab->id}}">{{$jab->jabatan}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-lg-7 klasifikasi_id">
+                                        <label for="klasifikasi_id">Klasifikasi Surat<span class="required">*</span></label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-thumbtack"></i></span>
+                                            <select id="klasifikasi_id" class="form-control selectpicker"
+                                                    title="-- Pilih Klasifikasi Surat --" data-live-search="true"
+                                                    name="klasifikasi_id" data-max-options="1" multiple required>
+                                                @foreach($klasifikasi as $k)
+                                                    <option value="{{$k->id}}">{{$k->perihal}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div class="row form-group">
                                     <div class="col-lg-7 perihal">
@@ -492,23 +535,23 @@
                                 </div>
 
                                 <div class="row form-group penerima">
-                                    <div class="col-lg-7 nama_instansi">
-                                        <label for="nama_instansi">Nama Instansi Penerima <span
+                                    <div class="col-lg-7 kepada">
+                                        <label for="kepada">Kepada <span
                                                     class="required">*</span></label>
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="fa fa-university"></i></span>
-                                            <input id="nama_instansi" placeholder="Nama instansi penerima" type="text"
-                                                   class="form-control" name="instansi_penerima" required>
+                                            <input id="kepada" placeholder="Kepada" type="text"
+                                                   class="form-control" name="kepada" required>
                                         </div>
                                     </div>
-                                    <div class="col-lg-5 kota">
+                                    <!-- <div class="col-lg-5 kota">
                                         <label for="kota">Asal Instansi Penerima <span class="required">*</span></label>
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="fa fa-map-marked-alt"></i></span>
                                             <input id="kota" placeholder="Asal instansi penerima" type="text"
                                                    class="form-control" name="kota_penerima" required>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
 
                                 <div class="row form-group no_surat_penerima" style="display: none">
@@ -524,7 +567,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row form-group penerima">
+                                <!-- <div class="row form-group penerima">
                                     <div class="col-lg-7 nama">
                                         <label for="nama">Nama Penerima <span class="required">*</span></label>
                                         <div class="input-group">
@@ -541,9 +584,9 @@
                                                    name="nip_penerima" onkeypress="return numberOnly(event, false)">
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
 
-                                <div class="row form-group penerima">
+                                <!-- <div class="row form-group penerima">
                                     <div class="col-lg-7 jabatan">
                                         <label for="jabatan">Jabatan Penerima</label>
                                         <div class="input-group">
@@ -561,7 +604,7 @@
                                                    name="pangkat_penerima" onkeypress="return numberOnly(event, false)">
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="row form-group isi">
                                     <div class="col-lg-12">
@@ -570,12 +613,12 @@
                                     </div>
                                 </div>
 
-                                <div class="row form-group tembusan">
+                                <!-- <div class="row form-group tembusan">
                                     <div class="col-lg-12">
                                         <label for="tembusan">Tembusan</label>
                                         <textarea id="tembusan" class="use-tinymce" name="tembusan"></textarea>
                                     </div>
-                                </div>
+                                </div> -->
                             @endif
 
                             <div class="row form-group">
