@@ -305,7 +305,7 @@
             $notifications = count($nt_sm) + count($nt_sk);
 
         } elseif(Auth::user()->isKadin()){
-            $role = 'KADIN';
+            $role = 'Rektor';
             $nk_sm = \App\Models\SuratMasuk::where('isDisposisi', false)->get();
             $nk_sk = \App\Models\SuratKeluar::where('status', 1)->get();
             $notifications = count($nk_sm) + count($nk_sk);
@@ -613,8 +613,7 @@
         <!-- footer content -->
         <footer>
             <div class="pull-right">
-                &copy; 2018 {{env("APP_NAME")}}. All right reserved. Designed by <a href="http://rabbit-media.net">Rabbit
-                    Media</a>
+                &copy; 2021 {{env("APP_NAME")}}. All right reserved. Designed by <a href="https://youcb.ac.id">BSI yoUCB</a>
             </div>
             <div class="clearfix"></div>
         </footer>

@@ -1,5 +1,5 @@
 @extends('layouts.mst')
-@section('title', 'Agenda Surat Keluar | '.env('APP_NAME').' - Aplikasi Pengarsipan Surat dan Disposisi | Dinas Pertanian dan Ketahanan Pangan Kota Madiun')
+@section('title', 'Agenda Surat Keluar | '.env('APP_NAME').' - Universitas Cahaya Bangsa')
 @push("styles")
     <link href="{{asset('css/myCheckbox.css')}}" rel="stylesheet">
     <style>

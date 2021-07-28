@@ -7,8 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" href="{{asset('favicon.ico')}}" type="image/ico"/>
 
-    <title>{{env('APP_NAME')}} &ndash; Aplikasi Pengarsipan Surat dan Disposisi | Dinas Pertanian dan Ketahanan Pangan
-        Kota Madiun</title>
+    <title>{{env('APP_NAME')}} &ndash; Universitas Cahaya Bangsa</title>
     <style>
         @media print {
             a[href]:after {

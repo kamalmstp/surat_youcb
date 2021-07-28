@@ -1,5 +1,5 @@
 @extends('layouts.mst')
-@section('title', 'Halaman Admin: Tabel User | '.env('APP_NAME').' - Aplikasi Pengarsipan Surat dan Disposisi | Dinas Pertanian dan Ketahanan Pangan Kota Madiun')
+@section('title', 'Halaman Admin: Tabel User | '.env('APP_NAME').' - Universitas Cahaya Bangsa')
 @push("styles")
     <style>
         .dataTables_filter {

@@ -1,5 +1,5 @@
 @extends('layouts.mst')
-@section('title', 'Profil '.ucfirst($role).': '.$user->name.' | '.env('APP_NAME').' - Aplikasi Pengarsipan Surat dan Disposisi | Dinas Pertanian dan Ketahanan Pangan Kota Madiun')
+@section('title', 'Profil '.ucfirst($role).': '.$user->name.' | '.env('APP_NAME').' - Universitas Cahaya Bangsa')
 @push("styles")
     <style>
         .height1 {

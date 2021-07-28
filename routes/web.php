@@ -15,8 +15,8 @@ Route::post('password/reset/{token}', 'Auth\ResetPasswordController@showResetFor
 Route::post('password/reset', 'Auth\ResetPasswordController@postReset')->name('password.reset');
 
 Route::get('qr', function () {
-    $qr = \QrCode::size(100)
-              ->generate('ID REG : 343434738474<br>Nomor Surat : 9346734idjfnfjdsfuj<br>verifikasi: https://youcb.ac.id');
+    $qr = \QrCode::size(300)->format('jpeg')
+              ->generate('ID REG : 343434738474<br>Nomor Surat : 9346734idjfnfjdsfuj<br>verifikasi: https://youcb.ac.id', public_path('surat/qr/qr.jpeg'));
 
     echo $qr;
   });

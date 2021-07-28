@@ -1,5 +1,5 @@
 ﻿@extends('layouts.mst')
-@section('title', 'Surat Masuk | '.env('APP_NAME').' - Aplikasi Pengarsipan Surat dan Disposisi | Dinas Pertanian dan Ketahanan Pangan Kota Madiun')
+@section('title', 'Surat Masuk | '.env('APP_NAME').' - Universitas Cahaya Bangsa')
 @push("styles")
     <link href="{{asset('css/myCheckbox.css')}}" rel="stylesheet">
     <style>
@@ -251,8 +251,8 @@
                                     <label for="no_surat">Nomor Surat <span class="required">*</span></label>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-hashtag"></i></span>
-                                        <input id="no_surat" class="form-control" type="text" name="no_surat"
-                                               placeholder="kode_perihal/nomor_urut/kode_instansi/tahun" required>
+                                        <input class="form-control" type="text" name="no_surat"
+                                               placeholder="Nomor Surat" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-5">
@@ -319,7 +319,7 @@
                             </div>
 
                             <div class="row form-group">
-                                <div class="col-lg-7">
+                                <!-- <div class="col-lg-7">
                                     <label for="nama_instansi">Nama Instansi Pengirim <span
                                                 class="required">*</span></label>
                                     <div class="input-group">
@@ -327,8 +327,16 @@
                                         <input id="nama_instansi" placeholder="Nama instansi pengirim" type="text"
                                                class="form-control" name="nama_instansi" required>
                                     </div>
+                                </div> -->
+                                <div class="col-lg-7">
+                                    <label for="nama">Nama Pengirim <span class="required">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-user-tie"></i></span>
+                                        <input id="nama" placeholder="Nama lengkap pengirim" type="text"
+                                               class="form-control" name="nama_pengirim" required>
+                                    </div>
                                 </div>
-                                <div class="col-lg-5">
+                                <!-- <div class="col-lg-5">
                                     <label for="asal_instansi">Asal Instansi Pengirim <span
                                                 class="required">*</span></label>
                                     <div class="input-group">
@@ -336,10 +344,18 @@
                                         <input id="asal_instansi" placeholder="Asal instansi pengirim" type="text"
                                                class="form-control" name="asal_instansi" required>
                                     </div>
+                                </div> -->
+                                <div class="col-lg-5">
+                                    <label for="nama_instansi">Nama Instansi Pengirim </label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-university"></i></span>
+                                        <input id="nama_instansi" placeholder="Nama instansi pengirim" type="text"
+                                               class="form-control" name="nama_instansi">
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="row form-group">
+                            <!-- <div class="row form-group">
                                 <div class="col-lg-7">
                                     <label for="nama">Nama Pengirim <span class="required">*</span></label>
                                     <div class="input-group">
@@ -357,9 +373,9 @@
                                                required>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="row form-group">
+                            <!-- <div class="row form-group">
                                 <div class="col-lg-7">
                                     <label for="jabatan">Jabatan Pengirim <span class="required">*</span></label>
                                     <div class="input-group">
@@ -376,7 +392,7 @@
                                                class="form-control" name="pangkat_pengirim" required>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
                             <div class="row form-group">
                                 <div class="col-lg-12">
