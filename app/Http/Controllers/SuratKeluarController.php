@@ -151,11 +151,12 @@ class SuratKeluarController extends Controller
 
         } elseif (Auth::user()->isPengolah()) {
             $date = date('Y-m-d');
-            $jab = Jabatan::find($request->jabatan_id);
-            $kla = PerihalSurat::find($request->perihal_id);
+            $jab = Jabatan::where('id', $request->jabatan_id);
+            $kla = PerihalSurat::where('id', $request->perihal_id);
             $kd_jab = $jab->kode;
             $kd_kla = $kla->kode;
-            $no_surat = $request->no_urut.'/'.$kd_jab->kode.'/'.$kd_kla->kode.'/'.date("Y");
+            $no_surat = $request->no_urut.'/'.$kd_jab.'/'.$kd_kla.'/'.date("Y");
+            // var_dump($no_surat);
             $sk->update([
                 'nama_pengolah' => Auth::user()->name,
                 'tgl_surat' => $date,
