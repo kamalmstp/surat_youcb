@@ -107,12 +107,6 @@
                                                 <td>{{\Carbon\Carbon::parse($masuk->tgl_surat)->format('j F Y')}}</td>
                                             </tr>
                                             <tr>
-                                                <td><i class="fa fa-thumbtack"></i>&nbsp;</td>
-                                                <td>Jenis Surat</td>
-                                                <td>&nbsp;:&nbsp;</td>
-                                                <td>{{$masuk->getJenisSurat->jenis}}</td>
-                                            </tr>
-                                            <tr>
                                                 <td><i class="fa fa-user-tie"></i>&nbsp;</td>
                                                 <td>Nama Pengirim</td>
                                                 <td>&nbsp;:&nbsp;</td>
@@ -145,29 +139,6 @@
                                                 </td>
                                             </tr>
                                         </table>
-                                        <hr style="margin: .5em 0">
-                                        <strong>Disposisi :</strong>
-                                        @if($masuk->isDisposisi == true)
-                                            <table>
-                                                <tr data-toggle="tooltip" data-placement="left"
-                                                    title="Diteruskan kepada Sdr.">
-                                                    <td><i class="fa fa-user-tie"></i>&nbsp;</td>
-                                                    <td>{!!$masuk->getSuratDisposisi->diteruskan_kepada!!}</td>
-                                                </tr>
-                                                <tr data-toggle="tooltip" data-placement="left"
-                                                    title="Dengan hormat harap">
-                                                    <td><i class="fa fa-hand-holding"></i>&nbsp;</td>
-                                                    <td>{{$masuk->getSuratDisposisi->harapan}}</td>
-                                                </tr>
-                                                <tr data-toggle="tooltip" data-placement="left" title="Catatan">
-                                                    <td><i class="fa fa-clipboard-list"></i>&nbsp;</td>
-                                                    <td>{{$masuk->getSuratDisposisi->catatan != "" ?
-                                                    $masuk->getSuratDisposisi->catatan : '(kosong)'}}</td>
-                                                </tr>
-                                            </table>
-                                        @else
-                                            (kosong)
-                                        @endif
                                     </td>
                                     <td style="vertical-align: middle" align="center">
                                         @if(Auth::user()->isPengolah())
@@ -197,6 +168,18 @@
                                                         </li>
                                                     @endif
                                                 </ul>
+                                            </div>
+                                            <hr>
+                                            <div class="btn-group">
+                                                @if($masuk->isDisposisi == true)
+                                                <a type="button" class="btn btn-info btn-xs">
+                                                    <i class="fa fa-paper-plane"></i> Lihat Disposisi
+                                                </a>
+                                                @else
+                                                <a type="button" class="btn btn-default btn-xs">
+                                                    <i class="fa fa-paper-plane"></i> Tidak ada Disposisi
+                                                </a>
+                                                @endif
                                             </div>
                                         @elseif(Auth::user()->isKadin())
                                             <div class="btn-group">
@@ -266,7 +249,7 @@
                             </div>
 
                             <div class="row form-group">
-                                <div class="col-lg-7">
+                                <!-- <div class="col-lg-7">
                                     <label for="jenis_id">Jenis Surat <span class="required">*</span></label>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-thumbtack"></i></span>
@@ -275,6 +258,19 @@
                                                 name="jenis_id" data-max-options="1" multiple required>
                                             @foreach($types as $type)
                                                 <option value="{{$type->id}}">{{$type->jenis}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div> -->
+                                <div class="col-lg-7">
+                                    <label for="perihal_id">Perihal Surat <span class="required">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-thumbtack"></i></span>
+                                        <select id="perihal_id" class="form-control selectpicker"
+                                                title="-- Pilih Perihal Surat --" data-live-search="true"
+                                                name="perihal_id" data-max-options="1" multiple required>
+                                            @foreach($perihal as $type)
+                                                <option value="{{$type->id}}">{{$type->perihal}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -299,7 +295,7 @@
                             </div>
 
                             <div class="row form-group">
-                                <div class="col-lg-7">
+                                <div class="col-lg-12">
                                     <label for="perihal">Perihal <span class="required">*</span></label>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-comments"></i></span>
@@ -307,7 +303,7 @@
                                                placeholder="Perihal" required>
                                     </div>
                                 </div>
-                                <div class="col-lg-5">
+                                <!-- <div class="col-lg-5">
                                     <label for="lampiran">Lampiran <span class="required">*</span></label>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-file-image"></i></span>
@@ -315,7 +311,7 @@
                                                placeholder="Contoh: 1 (satu)" required>
                                         <span class="input-group-addon">lembar</span>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
 
                             <div class="row form-group">

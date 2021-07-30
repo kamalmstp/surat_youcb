@@ -68,8 +68,6 @@ class SuratKeluarController extends Controller
             $jabatan = Jabatan::find($sk->jabatan_id);
             $klasifikasi = PerihalSurat::find($sk->perihal_id);
 
-            // $qr = \QrCode::size(100)->format('png')->generate('https://youcb.ac.id');
-
             $t1 = $jabatan->jabatan;
             $t2 = $sk->no_urut;
             $t3 = $jabatan->kode;
@@ -80,6 +78,11 @@ class SuratKeluarController extends Controller
             $t8 = $sk->tgl_surat;
             $t9 = $jabatan->nama_pejabat;
             $t10 = $jabatan->nidn;
+
+            // $qr = \QrCode::size(100)->format('png')->generate('Nomor Surat : '.$t2.'/'.$t.'
+            //     Tgl Surat :
+            //     Penandatangan :
+            //     File Surat : ');
 
             $document->setValues(array(
                 'JABATAN' => $t1,

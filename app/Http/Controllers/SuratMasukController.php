@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\JenisSurat;
+use App\Models\PerihalSurat;
 use App\Models\SuratDisposisi;
 use App\Models\SuratKeluar;
 use App\Models\SuratMasuk;
@@ -16,10 +17,11 @@ class SuratMasukController extends Controller
     {
         $masuks = SuratMasuk::orderByDesc('id')->get();
         $types = JenisSurat::all();
+        $perihal = PerihalSurat::all();
         $no_urut = str_pad(SuratMasuk::count() + 1, 3, '0', STR_PAD_LEFT);
         $findSurat = $request->q;
 
-        return view('surat.masuk', compact('masuks', 'types', 'no_urut', 'findSurat'));
+        return view('surat.masuk', compact('masuks', 'perihal', 'types', 'no_urut', 'findSurat'));
     }
 
     public function createSuratMasuk(Request $request)
@@ -27,7 +29,7 @@ class SuratMasukController extends Controller
         if ($request->hasfile('files')) {
             $this->validate($request, [
                 'files' => 'required|array',
-                'files.*' => 'mimes:jpg,jpeg,gif,png|max:5120'
+                'files.*' => 'mimes:jpg,jpeg,gif,png,docx,doc,pdf|max:5120'
             ]);
 
             $no_urut = str_pad(SuratMasuk::count() + 1, 3, '0', STR_PAD_LEFT);
@@ -42,12 +44,12 @@ class SuratMasukController extends Controller
 
             SuratMasuk::create([
                 'user_id' => Auth::id(),
-                'jenis_id' => $request->jenis_id,
+                'jenis_id' => 1,
+                'perihal_id' => $request->perihal_id,
                 'tgl_surat' => $request->tgl_surat,
                 'no_surat' => $request->no_surat,
                 'sifat_surat' => $request->sifat_surat,
                 'perihal' => $request->perihal,
-                'lampiran' => $request->lampiran . ' lembar',
                 'nama_instansi' => $request->nama_instansi,
                 'asal_instansi' => $request->asal_instansi,
                 'nama_pengirim' => $request->nama_pengirim,
