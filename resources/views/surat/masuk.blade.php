@@ -183,14 +183,21 @@
                                             </div>
                                         @elseif(Auth::user()->isKadin())
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-success btn-sm"
+                                                <!-- <button type="button" class="btn btn-success btn-sm"
                                                         style="font-weight: 600"
                                                         onclick="disposisiSurat('{{$masuk->id}}',
                                                                 '{{$masuk->no_surat}}','create')"
                                                         {{$masuk->isDisposisi == false ? '' : 'disabled'}}>
                                                     <i class="fa fa-envelope"></i>&ensp;{{$masuk->isDisposisi == false ?
-                                                'DISPOSISI' : 'TERDISPOSISI'}}
-                                                </button>
+                                                'BUAT DISPOSISI' : 'LIHAT DISPOSISI'}}
+                                                </button> -->
+                                                <a href="{{ route('disposisi',['id' => encrypt
+                                                            ($masuk->id)]) }}" type="button" class="btn btn-success btn-sm"
+                                                        style="font-weight: 600"
+                                                        {{$masuk->isDisposisi == false ? '' : 'disabled'}}>
+                                                    <i class="fa fa-envelope"></i>&ensp;{{$masuk->isDisposisi == false ?
+                                                'BUAT DISPOSISI' : 'LIHAT DISPOSISI'}}
+                                                    </a>
                                                 <button type="button" class="btn btn-success btn-sm dropdown-toggle"
                                                         data-toggle="dropdown" aria-expanded="false">
                                                     <span class="caret"></span>

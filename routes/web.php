@@ -128,6 +128,11 @@ Route::group(['prefix' => '/'], function () {
 
         Route::group(['middleware' => 'kadin'], function () {
 
+            Route::get('disposisi/{id}', [
+                'uses' => 'DisposisiController@index',
+                'as' => 'disposisi'
+            ]);
+
             Route::post('disposisi/create', [
                 'uses' => 'SuratMasukController@createSuratDisposisi',
                 'as' => 'create.surat-disposisi'
