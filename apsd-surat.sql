@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 30, 2021 at 09:18 AM
--- Server version: 10.4.20-MariaDB
--- PHP Version: 7.4.21
+-- Generation Time: Aug 03, 2021 at 07:27 AM
+-- Server version: 10.4.17-MariaDB
+-- PHP Version: 7.4.13
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `apsd`
+-- Database: `apsd-surat`
 --
 
 -- --------------------------------------------------------
@@ -121,21 +121,21 @@ CREATE TABLE `jabatan` (
 
 INSERT INTO `jabatan` (`id`, `kode`, `jabatan`, `nama_pejabat`, `nidn`) VALUES
 (1, 'UCB.R', 'Rektor', 'Juhriyansyah Dalle, S.Pd., S.Si., M.Kom., Ph.D', '2005087603'),
-(2, 'UCB.R.1', 'Wakil Rektor I', NULL, NULL),
-(3, 'UCB.R.1.1', 'Departemen Akademik Kemahasiswaan, BSI', NULL, NULL),
-(4, 'UCB.R.1.2', 'Departemen Perencanaan Kerjasama Hukum dan Internasional dan Inovasi Bisnis Inkubator, dan Karir', NULL, NULL),
-(5, 'UCB.R.1.3', 'Lembaga Penelitian dan Pengabdian kepada Masyarakat (LPPM)', NULL, NULL),
-(6, 'UCB.R.1.4', 'Lembaga Penjaminan Mutu (LPM) & Lembaga Peningkatan dan Pengembangan Pembelajaran (LP3)', NULL, NULL),
-(7, 'UCB.R.2', 'Wakil Rektor II', NULL, NULL),
-(8, 'UCB.R.2.1', 'Keuangan dan Aset', NULL, NULL),
-(9, 'UCB.R.2.2', 'Departemen Umum, Pusat Keagamaan dan Konseling Pusat Keamanaan Kesehatan, dan Sanitasi', NULL, NULL),
-(10, 'UCB.F.01.', 'Fakultas sains dan Teknologi', NULL, NULL),
-(11, 'UCB.F.01.1', 'Program Studi Kesehatan Masyarakat', NULL, NULL),
-(12, 'UCB.F.01.2', 'Program Studi Keperawatan dan Ners', NULL, NULL),
-(13, 'UCB.F.01.3', 'Program Studi Teknologi Informasi', NULL, NULL),
-(14, 'UCB.F.02', 'Fakultas Hukum dan Bisnis', NULL, NULL),
-(15, 'UCB.F.02.1', 'Program Studi Ilmu Hukum', NULL, NULL),
-(16, 'UCB.F.02.2', 'Program Studi Manajemen', NULL, NULL);
+(2, 'UCB.R.1', 'Wakil Rektor I', 'Wakil Rektor I', NULL),
+(3, 'UCB.R.1.1', 'Departemen Akademik Kemahasiswaan, BSI', 'Akademik', NULL),
+(4, 'UCB.R.1.2', 'Departemen Perencanaan Kerjasama Hukum dan Internasional dan Inovasi Bisnis Inkubator, dan Karir', 'Kerjasama', NULL),
+(5, 'UCB.R.1.3', 'Lembaga Penelitian dan Pengabdian kepada Masyarakat (LPPM)', 'LPPM', NULL),
+(6, 'UCB.R.1.4', 'Lembaga Penjaminan Mutu (LPM) & Lembaga Peningkatan dan Pengembangan Pembelajaran (LP3)', 'LPM', NULL),
+(7, 'UCB.R.2', 'Wakil Rektor II', 'Wakil Rektor II', NULL),
+(8, 'UCB.R.2.1', 'Keuangan dan Aset', 'Keuangan', NULL),
+(9, 'UCB.R.2.2', 'Departemen Umum, Pusat Keagamaan dan Konseling Pusat Keamanaan Kesehatan, dan Sanitasi', 'Umum', NULL),
+(10, 'UCB.F.01.', 'Fakultas sains dan Teknologi', 'FST', NULL),
+(11, 'UCB.F.01.1', 'Program Studi Kesehatan Masyarakat', 'PSKM', NULL),
+(12, 'UCB.F.01.2', 'Program Studi Keperawatan dan Ners', 'Ners', NULL),
+(13, 'UCB.F.01.3', 'Program Studi Teknologi Informasi', 'PSTI', NULL),
+(14, 'UCB.F.02', 'Fakultas Hukum dan Bisnis', 'FHB', NULL),
+(15, 'UCB.F.02.1', 'Program Studi Ilmu Hukum', 'PSIH', NULL),
+(16, 'UCB.F.02.2', 'Program Studi Manajemen', 'PSM', NULL);
 
 -- --------------------------------------------------------
 
@@ -274,7 +274,9 @@ INSERT INTO `perihal_surats` (`id`, `kode`, `perihal`, `created_at`, `updated_at
 CREATE TABLE `surat_disposisis` (
   `id` int(10) UNSIGNED NOT NULL,
   `suratmasuk_id` int(10) UNSIGNED NOT NULL,
-  `diteruskan_kepada` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `dari` int(5) DEFAULT NULL,
+  `kepada` int(5) DEFAULT NULL,
+  `diteruskan_kepada` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `harapan` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `catatan` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -285,8 +287,9 @@ CREATE TABLE `surat_disposisis` (
 -- Dumping data for table `surat_disposisis`
 --
 
-INSERT INTO `surat_disposisis` (`id`, `suratmasuk_id`, `diteruskan_kepada`, `harapan`, `catatan`, `created_at`, `updated_at`) VALUES
-(27, 27, '<p>Keuangan</p>', 'Buat Surat Balasan', 'untuk kfdmkdfm', '2021-07-28 08:11:35', '2021-07-28 08:11:35');
+INSERT INTO `surat_disposisis` (`id`, `suratmasuk_id`, `dari`, `kepada`, `diteruskan_kepada`, `harapan`, `catatan`, `created_at`, `updated_at`) VALUES
+(30, 30, 1, 5, NULL, 'Tanggapan dan Saran', 'gfdfgdfgf', '2021-08-03 03:16:35', '2021-08-03 03:16:35'),
+(31, 30, 1, 11, NULL, 'Proses Lebih Lanjut', 'jknj', '2021-08-03 03:34:44', '2021-08-03 03:34:44');
 
 -- --------------------------------------------------------
 
@@ -330,7 +333,7 @@ CREATE TABLE `surat_keluars` (
 --
 
 INSERT INTO `surat_keluars` (`id`, `user_id`, `jenis_id`, `suratdisposisi_id`, `nama_pengolah`, `tgl_surat`, `no_surat_penerima`, `instansi_penerima`, `kota_penerima`, `nama_penerima`, `jabatan_penerima`, `pangkat_penerima`, `kepada`, `nip_penerima`, `jabatan_id`, `perihal_id`, `no_urut`, `no_surat`, `sifat_surat`, `lampiran`, `perihal`, `isi`, `tembusan`, `status`, `catatan`, `files`, `created_at`, `updated_at`) VALUES
-(35, 1, 1, 27, 'pegawai', '2021-07-28', NULL, NULL, NULL, 'Pengirim', NULL, NULL, 'Seluruh Tenaga Pendidik dan Tenaga Kependidikan Universitas Cahaya Bangsa', NULL, 1, 1, '003', 'nomor', 'penting', ' lembar', NULL, 'isi siisis', NULL, 1, NULL, NULL, '2021-07-28 08:11:35', '2021-07-28 10:12:58');
+(36, 12, 1, NULL, 'LPMM', '2021-08-03', NULL, NULL, NULL, NULL, NULL, NULL, 'sdfsdf', NULL, 1, 94, '456', 'fdfd', NULL, ' lembar', 'dsfsdfsdf', '<p>dsfdsfdsfdsf</p>', NULL, 1, NULL, NULL, '2021-08-03 04:10:02', '2021-08-03 04:14:16');
 
 -- --------------------------------------------------------
 
@@ -357,6 +360,7 @@ CREATE TABLE `surat_masuks` (
   `tembusan` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `files` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `isDisposisi` tinyint(1) NOT NULL DEFAULT 0,
+  `status_surat` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -365,10 +369,10 @@ CREATE TABLE `surat_masuks` (
 -- Dumping data for table `surat_masuks`
 --
 
-INSERT INTO `surat_masuks` (`id`, `user_id`, `jenis_id`, `perihal_id`, `tgl_surat`, `no_surat`, `sifat_surat`, `lampiran`, `perihal`, `nama_instansi`, `asal_instansi`, `nama_pengirim`, `jabatan_pengirim`, `pangkat_pengirim`, `nip_pengirim`, `tembusan`, `files`, `isDisposisi`, `created_at`, `updated_at`) VALUES
-(27, 11, 1, NULL, '2021-07-28', '8347/dfd/df34/2021', 'penting', '1 (satu) lembar', 'Testing', 'instansi', NULL, 'Pengirim', NULL, NULL, NULL, '<p>tembusan tembusan</p>', '[\"WhatsApp Image 2021-06-19 at 20.25.59.jpeg\",\"WhatsApp Image 2021-06-02 at 16.47.36.jpeg\"]', 1, '2021-07-28 07:56:13', '2021-07-28 08:11:35'),
-(29, 11, 1, NULL, '2021-07-28', '8347/dfd/df34/2021', 'penting', '1 (satu) lembar', 'Testing', 'pengirim', NULL, 'dfkmkfmk', NULL, NULL, NULL, '<p>tesdfdsfdsf</p>', '[\"WhatsApp Image 2021-06-02 at 16.47.36.jpeg\"]', 0, '2021-07-29 02:25:43', '2021-07-29 02:25:43'),
-(30, 11, NULL, 1, '2021-07-26', '8347/dfd/df34/2021', 'penting', NULL, 'dsflsdkfksdmfkdsf', 'dlkfsdmfkdmf', NULL, 'sdlkfnkdsmfkdmf', NULL, NULL, NULL, '<p>sdsfslkdfmsdmfksdf</p>', '[\"WhatsApp Image 2020-08-11 at 10.24.04.jpeg\",\"WhatsApp Image 2021-06-19 at 20.25.59.jpeg\",\"WhatsApp Image 2021-06-02 at 16.47.36.jpeg\"]', 0, '2021-07-29 04:40:28', '2021-07-29 04:40:28');
+INSERT INTO `surat_masuks` (`id`, `user_id`, `jenis_id`, `perihal_id`, `tgl_surat`, `no_surat`, `sifat_surat`, `lampiran`, `perihal`, `nama_instansi`, `asal_instansi`, `nama_pengirim`, `jabatan_pengirim`, `pangkat_pengirim`, `nip_pengirim`, `tembusan`, `files`, `isDisposisi`, `status_surat`, `created_at`, `updated_at`) VALUES
+(27, 11, 1, NULL, '2021-07-28', '8347/dfd/df34/2021', 'penting', '1 (satu) lembar', 'Testing', 'instansi', NULL, 'Pengirim', NULL, NULL, NULL, '<p>tembusan tembusan</p>', '[\"WhatsApp Image 2021-06-19 at 20.25.59.jpeg\",\"WhatsApp Image 2021-06-02 at 16.47.36.jpeg\"]', 0, NULL, '2021-07-28 07:56:13', '2021-07-28 08:11:35'),
+(29, 11, 1, NULL, '2021-07-28', '8347/dfd/df34/2021', 'penting', '1 (satu) lembar', 'Testing', 'pengirim', NULL, 'dfkmkfmk', NULL, NULL, NULL, '<p>tesdfdsfdsf</p>', '[\"WhatsApp Image 2021-06-02 at 16.47.36.jpeg\"]', 0, NULL, '2021-07-29 02:25:43', '2021-07-29 02:25:43'),
+(30, 11, NULL, 1, '2021-07-26', '8347/dfd/df34/2021', 'penting', NULL, 'dsflsdkfksdmfkdsf', 'dlkfsdmfkdmf', NULL, 'sdlkfnkdsmfkdmf', NULL, NULL, NULL, '<p>sdsfslkdfmsdmfksdf</p>', '[\"WhatsApp Image 2020-08-11 at 10.24.04.jpeg\",\"WhatsApp Image 2021-06-19 at 20.25.59.jpeg\",\"WhatsApp Image 2021-06-02 at 16.47.36.jpeg\"]', 1, 'disposisi', '2021-07-29 04:40:28', '2021-08-03 03:34:45');
 
 -- --------------------------------------------------------
 
@@ -386,6 +390,7 @@ CREATE TABLE `users` (
   `role` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `jabatan` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `jabatan_id` int(5) DEFAULT NULL,
   `pangkat` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `alamat` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `nmr_hp` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -401,11 +406,12 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `ava`, `nip`, `name`, `email`, `password`, `role`, `remember_token`, `jabatan`, `pangkat`, `alamat`, `nmr_hp`, `jk`, `lat`, `long`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'avatar.png', '2005087603', 'Juhriyansyah Dalle, S.Pd.,S.Si, M.Kom.,Ph.D.', 'rektor@youcb.ac.id', '$2b$10$.Al/4TXIsQYHUIxjNo2r0O.OhWEvZEd8LAbbNZuINwEF8XultZJRW', 'kadin', 'ybaUYbX3HIYBLgZ0xIZYCcDX16dtF3vnGX7HUDLuLJXOk10XqLR0l5s6JGZe', 'Rektor', 'pangkat', 'alamat', '0813 1297 9899', 'pria', 42.6743812000, -83.0349578000, '2021-07-25 19:49:53', '2021-07-28 07:22:32', NULL),
-(2, 'avatar.png', '3301306710055122', 'Pengolah', 'pengolah@youcb.ac.id', '$2b$10$.Al/4TXIsQYHUIxjNo2r0O.OhWEvZEd8LAbbNZuINwEF8XultZJRW', 'pengolah', 'hw6TcrZZ8qO6UINO9EIvWhtIpYFG9DY6fvwgV16wWb6ZZssNkPLazjAglSIG', 'Transformer Repairer', 'Et', 'alamat', '0339 8832 4903', 'wanita', 42.6743812000, -83.0349578000, '2021-07-25 19:49:53', '2021-07-28 07:10:55', NULL),
-(5, 'avatar.png', '7315063008204838', 'TU yoUCB', 'tu@youcb.ac.id', '$2b$10$.Al/4TXIsQYHUIxjNo2r0O.OhWEvZEd8LAbbNZuINwEF8XultZJRW', 'tata_usaha', 'oURSOsZPqgiezc7vApmG52hfOe14yJfXND89lebjfhxFHt8ikcHMYnR1lC4e', 'Engineer', 'Vero', 'Kpg. Sukajadi No. 876, Tasikmalaya 99381, DKI', '(+62) 636 4558 6319', 'pria', 70.5963980000, -19.9909610000, '2021-07-25 19:49:54', '2021-07-25 19:49:55', NULL),
-(11, 'avatar.png', '123123123', 'pegawai', 'pegawai@youcb.ac.id', '$2y$10$TOkvQL13glEF8Y2vf/JwWe5c2IgdDuXOn5Cnj5TPl5As63TzyCfoK', 'pengolah', NULL, 'staff', 'pangkat', 'alamat', '324242', 'pria', 42.6743812000, -83.0349578000, '2021-07-28 07:29:05', '2021-07-28 07:29:05', NULL);
+INSERT INTO `users` (`id`, `ava`, `nip`, `name`, `email`, `password`, `role`, `remember_token`, `jabatan`, `jabatan_id`, `pangkat`, `alamat`, `nmr_hp`, `jk`, `lat`, `long`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'avatar.png', '2005087603', 'Juhriyansyah Dalle, S.Pd.,S.Si, M.Kom.,Ph.D.', 'rektor@youcb.ac.id', '$2b$10$.Al/4TXIsQYHUIxjNo2r0O.OhWEvZEd8LAbbNZuINwEF8XultZJRW', 'kadin', 'ybaUYbX3HIYBLgZ0xIZYCcDX16dtF3vnGX7HUDLuLJXOk10XqLR0l5s6JGZe', 'Rektor', NULL, 'pangkat', 'alamat', '0813 1297 9899', 'pria', 42.6743812000, -83.0349578000, '2021-07-25 19:49:53', '2021-07-28 07:22:32', NULL),
+(2, 'avatar.png', '3301306710055122', 'Pengolah', 'pengolah@youcb.ac.id', '$2b$10$.Al/4TXIsQYHUIxjNo2r0O.OhWEvZEd8LAbbNZuINwEF8XultZJRW', 'pengolah', 'hw6TcrZZ8qO6UINO9EIvWhtIpYFG9DY6fvwgV16wWb6ZZssNkPLazjAglSIG', 'Transformer Repairer', NULL, 'Et', 'alamat', '0339 8832 4903', 'wanita', 42.6743812000, -83.0349578000, '2021-07-25 19:49:53', '2021-07-28 07:10:55', NULL),
+(5, 'avatar.png', '7315063008204838', 'TU yoUCB', 'tu@youcb.ac.id', '$2b$10$.Al/4TXIsQYHUIxjNo2r0O.OhWEvZEd8LAbbNZuINwEF8XultZJRW', 'tata_usaha', 'oURSOsZPqgiezc7vApmG52hfOe14yJfXND89lebjfhxFHt8ikcHMYnR1lC4e', 'Engineer', NULL, 'Vero', 'alamat', '(+62) 636 4558 6319', 'pria', 70.5963980000, -19.9909610000, '2021-07-25 19:49:54', '2021-07-25 19:49:55', NULL),
+(11, 'avatar.png', '123123123', 'pegawai', 'pegawai@youcb.ac.id', '$2y$10$TOkvQL13glEF8Y2vf/JwWe5c2IgdDuXOn5Cnj5TPl5As63TzyCfoK', 'pengolah', NULL, 'staff', NULL, 'pangkat', 'alamat', '324242', 'pria', 42.6743812000, -83.0349578000, '2021-07-28 07:29:05', '2021-07-28 07:29:05', NULL),
+(12, 'avatar.png', '123123', 'LPMM', 'lpm@youcb.ac.id', '$2y$10$pqZTqYXWzjb9.JxZJveSOuvFR66IXin2ihoXnZzaC8b26crU0z7lG', 'pengolah', NULL, 'lpm', NULL, 'sdfk', '515415', '3120564156', 'pria', 14.9608979000, 78.0309542000, '2021-08-03 03:48:28', '2021-08-03 03:48:28', NULL);
 
 --
 -- Indexes for dumped tables
@@ -473,7 +479,9 @@ ALTER TABLE `perihal_surats`
 --
 ALTER TABLE `surat_disposisis`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `surat_disposisis_suratmasuk_id_foreign` (`suratmasuk_id`);
+  ADD KEY `surat_disposisis_suratmasuk_id_foreign` (`suratmasuk_id`),
+  ADD KEY `dari` (`dari`,`kepada`),
+  ADD KEY `kepada` (`kepada`);
 
 --
 -- Indexes for table `surat_keluars`
@@ -556,13 +564,13 @@ ALTER TABLE `perihal_surats`
 -- AUTO_INCREMENT for table `surat_disposisis`
 --
 ALTER TABLE `surat_disposisis`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `surat_keluars`
 --
 ALTER TABLE `surat_keluars`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `surat_masuks`
@@ -574,7 +582,7 @@ ALTER TABLE `surat_masuks`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables
@@ -596,6 +604,8 @@ ALTER TABLE `agenda_masuks`
 -- Constraints for table `surat_disposisis`
 --
 ALTER TABLE `surat_disposisis`
+  ADD CONSTRAINT `surat_disposisis_ibfk_1` FOREIGN KEY (`dari`) REFERENCES `jabatan` (`id`),
+  ADD CONSTRAINT `surat_disposisis_ibfk_2` FOREIGN KEY (`kepada`) REFERENCES `jabatan` (`id`),
   ADD CONSTRAINT `surat_disposisis_suratmasuk_id_foreign` FOREIGN KEY (`suratmasuk_id`) REFERENCES `surat_masuks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --

@@ -389,23 +389,19 @@
     if (Auth::guard('admin')->check() && Auth::guard('admin')->user()->isRoot()) { ?>
 
         function openTableUser() {
-            window.location.href = '{{route('
-            table.users ')}}'
+            window.location.href = '{{route("table.users")}}'
         }
 
         function openTableSuratMasuk() {
-            window.location.href = '{{route('
-            table.surat - masuk ')}}'
+            window.location.href = '{{route("table.surat-masuk")}}'
         }
 
         function openTableSuratDisposisi() {
-            window.location.href = '{{route('
-            table.surat - disposisi ')}}'
+            window.location.href = '{{route("table.surat-disposisi")}}'
         }
 
         function openTableSuratKeluar() {
-            window.location.href = '{{route('
-            table.surat - keluar ')}}'
+            window.location.href = '{{route("table.surat-keluar")}}'
         }
     <?php } ?>
 </script>

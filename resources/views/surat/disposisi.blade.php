@@ -72,24 +72,59 @@
                     </table>
 
                     <div class="row">
-                        <div class="pull-left">
+                        <!-- <div class="pull-left">
                             <a href="" type="button" class="btn btn-primary btn-sm"><i class="fa fa-history"></i> History Disposisi</a>
-                        </div>
+                        </div> -->
                         <div class="pull-right">
                             <a href="{{ route('show.surat-masuk') }}" type="button" class="btn btn-default btn-sm"><i class="fa fa-arrow-circle-left"></i> Kembali</a>
-                            <a href="" type="button" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> Tambah Disposisi</a>
+                            <button type="button" class="btn btn-success btn-sm" onclick="disposisiSurat('{{$masuk->id}}','{{$masuk->no_surat}}','create')"><i class="fa fa-plus"></i> Tambah Disposisi</button>
                         </div>
                     </div>
+
                     <div class="clearfix"></div>
+                    <br>
+                    <table id="datatable-responsive" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Disposisi Oleh</th>
+                                <th>Diteruskan Kepada</th>
+                                <th>Dengan Hormat</th>
+                                <th>Catatan Disposisi</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
 
-                    <div class="row" id="history_disposisi">
-
-                    </div>
+                        <tbody>
+                            @php $no=1 @endphp
+                            @foreach($disposisi as $dsp)
+                            <tr>
+                                <td style="vertical-align: middle" align="center">{{$no++}}</td>
+                                <td>
+                                    <strong>
+                                        <p>{{$dsp->getDari->jabatan}}</p>
+                                    </strong>
+                                    {{$dsp->getDari->nama_pejabat}}
+                                </td>
+                                <td>
+                                    <strong>{{$dsp->getKepada->jabatan}}</strong>
+                                    <p>{{$dsp->getKepada->nama_pejabat}}</p>
+                                </td>
+                                <td>
+                                    {{$dsp->harapan}}
+                                </td>
+                                <td>{{$dsp->catatan}}</td>
+                                <td></td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 @if(Auth::user()->isKadin())
 <div id="disposisiModal" class="modal fade">
     <div class="modal-dialog modal-lg">
@@ -107,7 +142,17 @@
                     <div class="row form-group">
                         <div class="col-lg-12">
                             <label for="diteruskan_kepada">Diteruskan kepada Saudara: <span class="required">*</span></label>
-                            <textarea id="diteruskan_kepada" name="diteruskan_kepada" class="use-tinymce"></textarea>
+                            <!-- <textarea id="diteruskan_kepada" name="diteruskan_kepada" class="use-tinymce"></textarea> -->
+
+                            <div class="input-group">
+                                <select name="kepada" id="kepada" class="form-control" required>
+                                    <option value="">--Diteruskan Kepada--</option>
+                                    @foreach($jabatan as $jbt)
+                                    <option value="{{$jbt->id}}">{{$jbt->jabatan}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                         </div>
                     </div>
                     <div class="row form-group">
@@ -160,5 +205,125 @@
 @endsection
 @push("scripts")
 <script>
+    function disposisiSurat(id, no_surat, method) {
+        var $form = $("#form-sd");
+        $("#sm_id").val(id);
+
+        $("#rb_ts").on("ifToggled", function() {
+            if ($(this).is(":checked")) {
+                $("#txt_ts").removeAttr('disabled').attr('readonly', 'readonly')
+                    .css('color', '#31c2a5').css('border-color', '#31c2a5');
+                $(this).parent().parent().css('border-color', '#31c2a5');
+            } else {
+                $("#txt_ts").attr('disabled', 'disabled')
+                    .css('background', '#eee').css('color', '#555').css('border-color', '#ccc');
+                $(this).parent().parent().css('border-color', '#ccc');
+            }
+        });
+
+        $("#rb_pll").on("ifToggled", function() {
+            if ($(this).is(":checked")) {
+                $("#txt_pll").removeAttr('disabled').attr('readonly', 'readonly')
+                    .css('color', '#31c2a5').css('border-color', '#31c2a5');
+                $(this).parent().parent().css('border-color', '#31c2a5');
+            } else {
+                $("#txt_pll").attr('disabled', 'disabled')
+                    .css('background', '#eee').css('color', '#555').css('border-color', '#ccc');
+                $(this).parent().parent().css('border-color', '#ccc');
+            }
+        });
+
+        $("#rb_kk").on("ifToggled", function() {
+            if ($(this).is(":checked")) {
+                $("#txt_kk").removeAttr('disabled').attr('readonly', 'readonly')
+                    .css('color', '#31c2a5').css('border-color', '#31c2a5');
+                $(this).parent().parent().css('border-color', '#31c2a5');
+            } else {
+                $("#txt_kk").attr('disabled', 'disabled')
+                    .css('background', '#eee').css('color', '#555').css('border-color', '#ccc');
+                $(this).parent().parent().css('border-color', '#ccc');
+            }
+        });
+
+        $("#rb_bsb").on("ifToggled", function() {
+            if ($(this).is(":checked")) {
+                $("#txt_bsb").removeAttr('disabled').attr('readonly', 'readonly')
+                    .css('background', '#31c2a5').css('color', '#fff').css('border-color', '#31c2a5');
+                $(this).parent().parent().css('border-color', '#31c2a5');
+            } else {
+                $("#txt_bsb").attr('disabled', 'disabled')
+                    .css('background', '#eee').css('color', '#555').css('border-color', '#ccc');
+                $(this).parent().parent().css('border-color', '#ccc');
+            }
+        });
+
+        $("#rb_cust").on("ifToggled", function() {
+            if ($(this).is(":checked")) {
+                $("#txt_cust").val('').removeAttr('disabled').attr('required', 'required').css('border-color', '#31c2a5');
+                $(this).parent().parent().css('border-color', '#31c2a5');
+            } else {
+                $("#txt_cust").val('').removeAttr('required').attr('disabled', 'disabled').css('border-color', '#ccc');
+                $(this).parent().parent().css('border-color', '#ccc');
+            }
+        });
+
+        if (method == 'create') {
+            $("#disposisiModal .modal-title").html('Buat Disposisi Surat Masuk #<strong>' + no_surat + '</strong>');
+            $("#btn_sd_submit").html("<strong>Submit</strong>");
+            $("#form-sd input[name=_method]").val('');
+            $form.attr('action', '{{route("create.surat-disposisi")}}');
+
+
+
+        } else if (method == 'update') {
+            $("#disposisiModal .modal-title").html('Edit Disposisi Surat Masuk #<strong>' + no_surat + '</strong>');
+            $("#btn_sd_submit").html("<strong>Simpan Perubahan</strong>");
+            $("#form-sd input[name=_method]").val('PUT');
+            $form.attr('action', '{{route("update.surat-disposisi" , ["id" => ""])}}/' + id);
+
+            $.get('{{route("edit.surat-disposisi", ["id" => ""])}}/' + id,
+                function(data) {
+                    $("#catatan").val(data.catatan);
+
+                    if (data.harapan == 'Tanggapan dan Saran') {
+                        $("#rb_ts").iCheck('check');
+                        $("#txt_ts").removeAttr('disabled').attr('readonly', 'readonly');
+                        $("#txt_pll, #txt_kk, #txt_bsb").attr('disabled', 'disabled');
+                        $("#txt_cust").removeAttr('required').attr('disabled', 'disabled');
+
+                    } else if (data.harapan == 'Proses Lebih Lanjut') {
+                        $("#rb_pll").iCheck('check');
+                        $("#txt_pll").removeAttr('disabled').attr('readonly', 'readonly');
+                        $("#txt_ts, #txt_kk, #txt_bsb").attr('disabled', 'disabled');
+                        $("#txt_cust").removeAttr('required').attr('disabled', 'disabled');
+
+                    } else if (data.harapan == 'Koordinasi / Konfirmasikan') {
+                        $("#rb_kk").iCheck('check');
+                        $("#txt_kk").removeAttr('disabled').attr('readonly', 'readonly');
+                        $("#txt_ts, #txt_pll, #txt_bsb").attr('disabled', 'disabled');
+                        $("#txt_cust").removeAttr('required').attr('disabled', 'disabled');
+
+                    } else if (data.harapan == 'Buat Surat Balasan') {
+                        $("#rb_bsb").iCheck('check');
+                        $("#txt_bsb").removeAttr('disabled').attr('readonly', 'readonly');
+                        $("#txt_ts, #txt_pll, #txt_kk").attr('disabled', 'disabled');
+                        $("#txt_cust").removeAttr('required').attr('disabled', 'disabled');
+
+                    } else {
+                        $("#rb_cust").iCheck('check');
+                        $("#txt_cust").val(data.harapan).removeAttr('disabled').attr('required', 'required');
+                        $("#txt_ts, #txt_pll, #txt_kk, #txt_bsb").attr('disabled', 'disabled');
+                    }
+                });
+        }
+
+        $form.on("submit", function(e) {
+            e.preventDefault();
+
+            $(this)[0].submit();
+        });
+
+        $("#disposisiModal").modal('show');
+    }
 </script>
 @endpush

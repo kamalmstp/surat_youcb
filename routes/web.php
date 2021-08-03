@@ -16,10 +16,10 @@ Route::post('password/reset', 'Auth\ResetPasswordController@postReset')->name('p
 
 Route::get('qr', function () {
     $qr = \QrCode::size(300)->format('jpeg')
-              ->generate('ID REG : 343434738474<br>Nomor Surat : 9346734idjfnfjdsfuj<br>verifikasi: https://youcb.ac.id', public_path('surat/qr/qr.jpeg'));
+        ->generate('ID REG : 343434738474<br>Nomor Surat : 9346734idjfnfjdsfuj<br>verifikasi: https://youcb.ac.id', public_path('surat/qr/qr.jpeg'));
 
     echo $qr;
-  });
+});
 
 Auth::routes();
 
@@ -39,7 +39,6 @@ Route::group(['namespace' => 'Auth', 'prefix' => 'account'], function () {
         'uses' => 'LoginController@logout',
         'as' => 'logout'
     ]);
-
 });
 
 Route::group(['prefix' => '/'], function () {
@@ -76,7 +75,6 @@ Route::group(['prefix' => '/'], function () {
             'uses' => 'UserController@beranda',
             'as' => 'beranda'
         ]);
-
     });
 
     Route::get('surat-{surat}/{id}/files', [
@@ -95,6 +93,16 @@ Route::group(['prefix' => '/'], function () {
             'middleware' => 'surat.masuk',
             'uses' => 'SuratMasukController@showSuratMasuk',
             'as' => 'show.surat-masuk'
+        ]);
+
+        Route::get('disposisi/{id}', [
+            'uses' => 'DisposisiController@index',
+            'as' => 'disposisi'
+        ]);
+
+        Route::post('disposisi/create', [
+            'uses' => 'SuratMasukController@createSuratDisposisi',
+            'as' => 'create.surat-disposisi'
         ]);
 
         Route::group(['middleware' => 'pengolah'], function () {
@@ -123,20 +131,13 @@ Route::group(['prefix' => '/'], function () {
                 'uses' => 'SuratMasukController@massDeleteFileSuratMasuk',
                 'as' => 'massDelete.surat-masuk'
             ]);
-
         });
 
         Route::group(['middleware' => 'kadin'], function () {
 
-            Route::get('disposisi/{id}', [
-                'uses' => 'DisposisiController@index',
-                'as' => 'disposisi'
-            ]);
 
-            Route::post('disposisi/create', [
-                'uses' => 'SuratMasukController@createSuratDisposisi',
-                'as' => 'create.surat-disposisi'
-            ]);
+
+
 
             Route::get('disposisi/edit/{id}', [
                 'uses' => 'SuratMasukController@editSuratDisposisi',
@@ -152,7 +153,6 @@ Route::group(['prefix' => '/'], function () {
                 'uses' => 'SuratMasukController@deleteSuratDisposisi',
                 'as' => 'delete.surat-disposisi'
             ]);
-
         });
 
         Route::group(['prefix' => 'agenda', 'middleware' => 'TU'], function () {
@@ -181,9 +181,7 @@ Route::group(['prefix' => '/'], function () {
                 'uses' => 'AgendaSuratMasukController@deleteAgenda',
                 'as' => 'delete.agenda-masuk'
             ]);
-
         });
-
     });
 
     Route::group(['prefix' => 'surat_keluar'], function () {
@@ -205,7 +203,6 @@ Route::group(['prefix' => '/'], function () {
         ]);
 
         Route::post('create', [
-            'middleware' => 'pegawai',
             'uses' => 'SuratKeluarController@createSuratKeluar',
             'as' => 'create.surat-keluar'
         ]);
@@ -265,11 +262,8 @@ Route::group(['prefix' => '/'], function () {
                 'uses' => 'AgendaSuratKeluarController@massDeleteFileSuratKeluar',
                 'as' => 'massDelete.surat-keluar'
             ]);
-
         });
-
     });
-
 });
 
 Route::group(['namespace' => 'Admins', 'prefix' => 'admin', 'middleware' => 'root'], function () {
@@ -306,7 +300,6 @@ Route::group(['namespace' => 'Admins', 'prefix' => 'admin', 'middleware' => 'roo
                         'uses' => 'AccountsController@deleteAdmins',
                         'as' => 'delete.admins'
                     ]);
-
                 });
 
                 Route::group(['prefix' => 'users'], function () {
@@ -335,9 +328,7 @@ Route::group(['namespace' => 'Admins', 'prefix' => 'admin', 'middleware' => 'roo
                         'uses' => 'AccountsController@deleteUsers',
                         'as' => 'delete.users'
                     ]);
-
                 });
-
             });
 
             Route::group(['prefix' => 'web_contents'], function () {
@@ -363,7 +354,6 @@ Route::group(['namespace' => 'Admins', 'prefix' => 'admin', 'middleware' => 'roo
                         'uses' => 'WebContentsController@deleteCarousels',
                         'as' => 'delete.carousels'
                     ]);
-
                 });
 
                 Route::group(['prefix' => 'jenis_surat'], function () {
@@ -387,7 +377,6 @@ Route::group(['namespace' => 'Admins', 'prefix' => 'admin', 'middleware' => 'roo
                         'uses' => 'WebContentsController@deleteJenisSurat',
                         'as' => 'delete.jenis-surat'
                     ]);
-
                 });
 
                 Route::group(['prefix' => 'perihal_surat'], function () {
@@ -411,11 +400,8 @@ Route::group(['namespace' => 'Admins', 'prefix' => 'admin', 'middleware' => 'roo
                         'uses' => 'WebContentsController@deletePerihalSurat',
                         'as' => 'delete.perihal-surat'
                     ]);
-
                 });
-
             });
-
         });
 
         Route::group(['namespace' => 'DataTransaction'], function () {
@@ -438,7 +424,6 @@ Route::group(['namespace' => 'Admins', 'prefix' => 'admin', 'middleware' => 'roo
                         'uses' => 'SuratController@massDeleteSuratMasuk',
                         'as' => 'massDelete.surat-masuk'
                     ]);
-
                 });
 
                 Route::group(['prefix' => 'disposisi'], function () {
@@ -457,7 +442,6 @@ Route::group(['namespace' => 'Admins', 'prefix' => 'admin', 'middleware' => 'roo
                         'uses' => 'SuratController@massDeleteSuratDisposisi',
                         'as' => 'massDelete.surat-disposisi'
                     ]);
-
                 });
 
                 Route::group(['prefix' => 'keluar'], function () {
@@ -476,9 +460,7 @@ Route::group(['namespace' => 'Admins', 'prefix' => 'admin', 'middleware' => 'roo
                         'uses' => 'SuratController@massDeleteSuratKeluar',
                         'as' => 'massDelete.surat-keluar'
                     ]);
-
                 });
-
             });
 
             Route::group(['prefix' => 'agenda_surat'], function () {
@@ -499,7 +481,6 @@ Route::group(['namespace' => 'Admins', 'prefix' => 'admin', 'middleware' => 'roo
                         'uses' => 'AgendaController@massDeleteAgendaMasuk',
                         'as' => 'massDelete.agenda-masuk'
                     ]);
-
                 });
 
                 Route::group(['prefix' => 'keluar'], function () {
@@ -518,13 +499,8 @@ Route::group(['namespace' => 'Admins', 'prefix' => 'admin', 'middleware' => 'roo
                         'uses' => 'AgendaController@massDeleteAgendaKeluar',
                         'as' => 'massDelete.agenda-keluar'
                     ]);
-
                 });
-
             });
-
         });
-
     });
-
 });

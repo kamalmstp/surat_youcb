@@ -10,5 +10,13 @@ class Jabatan extends Model
 
     protected $guarded = ['id'];
 
-    
+    public function getPejabatDari()
+    {
+        return $this->hasOne(SuratDisposisi::class, 'dari');
+    }
+
+    public function getPejabatKepada()
+    {
+        return $this->hasOne(SuratDisposisi::class, 'kepada');
+    }
 }

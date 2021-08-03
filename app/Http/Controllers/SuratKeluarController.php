@@ -31,27 +31,25 @@ class SuratKeluarController extends Controller
         $kadin = User::where('role', Role::KADIN)->first();
         $sk = SuratKeluar::find(decrypt($id));
 
-        if ($sk->jenis_id == 5 || $sk->jenis_id == 6 || $sk->jenis_id == 10 ||
-            $sk->jenis_id == 11 || $sk->jenis_id == 12 || $sk->jenis_id == 15 || $sk->jenis_id == 21) {
+        if (
+            $sk->jenis_id == 5 || $sk->jenis_id == 6 || $sk->jenis_id == 10 ||
+            $sk->jenis_id == 11 || $sk->jenis_id == 12 || $sk->jenis_id == 15 || $sk->jenis_id == 21
+        ) {
             return view('surat.template-sk.nd-npkn-sb-si-sk-spgl-su', compact('sk', 'kadin'));
-
         } elseif ($sk->jenis_id == 7 || $sk->jenis_id == 16) {
             return view('surat.template-sk.pe-spgt', compact('sk', 'kadin'));
-
-        } elseif ($sk->jenis_id == 4 || $sk->jenis_id == 8 || $sk->jenis_id == 13 ||
+        } elseif (
+            $sk->jenis_id == 4 || $sk->jenis_id == 8 || $sk->jenis_id == 13 ||
             $sk->jenis_id == 14 || $sk->jenis_id == 17 || $sk->jenis_id == 18 ||
-            $sk->jenis_id == 19 || $sk->jenis_id == 22) {
+            $sk->jenis_id == 19 || $sk->jenis_id == 22
+        ) {
             return view('surat.template-sk.m-r-skmt-sku-sp-spt-sppd-ts', compact('sk', 'kadin'));
-
         } elseif ($sk->jenis_id == 1) {
             return view('surat.template-sk.ba', compact('sk', 'kadin'));
-
         } elseif ($sk->jenis_id == 2 || $sk->jenis_id == 3) {
             return view('surat.template-sk.dh-lap', compact('sk', 'kadin'));
-
         } elseif ($sk->jenis_id == 9) {
             return view('surat.template-sk.ser', compact('sk', 'kadin'));
-
         } elseif ($sk->jenis_id == 20) {
             return view('surat.template-sk.mou', compact('sk', 'kadin'));
         }
@@ -60,13 +58,15 @@ class SuratKeluarController extends Controller
     public function wordSuratKeluar($id)
     {
         $sk = SuratKeluar::find(decrypt($id));
+        $jab_id = $sk->jabatan_id;
+        $kla_id = $sk->perihal_id;
 
-        if($sk->jenis_id == 1){
+        if ($sk->jenis_id == 1) {
             $file = public_path('surat/template/edaran.docx');
             $document = new \PhpOffice\PhpWord\TemplateProcessor($file);
 
-            $jabatan = Jabatan::find($sk->jabatan_id);
-            $klasifikasi = PerihalSurat::find($sk->perihal_id);
+            $jabatan = Jabatan::find($jab_id);
+            $klasifikasi = PerihalSurat::find($kla_id);
 
             $t1 = $jabatan->jabatan;
             $t2 = $sk->no_urut;
@@ -99,7 +99,7 @@ class SuratKeluarController extends Controller
             ));
             $document->setImageValue('QR', public_path('surat/qr/qr.png'));
 
-            $nama_file = public_path('surat/tmp/Surat Edaran '.$jabatan->jabatan.' '.$sk->tgl_surat.'.docx');
+            $nama_file = public_path('surat/tmp/Surat Edaran ' . $jabatan->jabatan . ' ' . $sk->tgl_surat . '.docx');
             // SuratKeluar::create([
 
             // ]);
@@ -151,14 +151,13 @@ class SuratKeluarController extends Controller
             ]);
 
             return back()->with('success', 'Surat keluar (' . $sk->getJenisSurat->jenis . ') berhasil diperbarui!');
-
         } elseif (Auth::user()->isPengolah()) {
             $date = date('Y-m-d');
-            $jab = Jabatan::where('id', $request->jabatan_id);
-            $kla = PerihalSurat::where('id', $request->perihal_id);
-            $kd_jab = $jab->kode;
-            $kd_kla = $kla->kode;
-            $no_surat = $request->no_urut.'/'.$kd_jab.'/'.$kd_kla.'/'.date("Y");
+            // $jab = Jabatan::where('id', $request->jabatan_id)->get();
+            // $kla = PerihalSurat::where('id', $request->perihal_id)->get();
+            // $kd_jab = $jab->kode;
+            // $kd_kla = $kla->kode;
+            // $no_surat = $request->no_urut . '/' . $kd_jab . '/' . $kd_kla . '/' . date("Y");
             // var_dump($no_surat);
             $sk->update([
                 'nama_pengolah' => Auth::user()->name,
@@ -169,7 +168,7 @@ class SuratKeluarController extends Controller
                 'kepada' => $request->kepada,
                 'perihal' => $request->perihal,
                 'isi' => $request->isi,
-                'no_surat' => $no_surat,
+                'no_surat' => 'fdfd',
                 'sifat_surat' => $request->sifat_surat,
                 'lampiran' => $request->lampiran . ' lembar',
                 'isi' => $request->isi,
@@ -178,7 +177,6 @@ class SuratKeluarController extends Controller
             ]);
 
             return back()->with('success', 'Surat keluar #' . $sk->no_surat . ' berhasil diperbarui!');
-
         } elseif (Auth::user()->isKadin()) {
             $sk->update([
                 'status' => $request->rb_status,
