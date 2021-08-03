@@ -76,6 +76,16 @@ class User extends Authenticatable
         return $this->hasMany(SuratKeluar::class, 'user_id');
     }
 
+    public function getOleh()
+    {
+        return $this->hasOne(SuratDisposisi::class, 'oleh');
+    }
+
+    public function getTujuan()
+    {
+        return $this->hasOne(SuratDisposisi::class, 'tujuan');
+    }
+
     public function scopeByActivationColumns(Builder $builder, $email, $verifyToken)
     {
         return $builder->where('email', $email)->where('verifyToken', $verifyToken);

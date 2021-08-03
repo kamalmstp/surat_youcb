@@ -105,6 +105,16 @@ Route::group(['prefix' => '/'], function () {
             'as' => 'create.surat-disposisi'
         ]);
 
+        Route::get('disposisi/delete/{id}', [
+            'uses' => 'SuratMasukController@deleteSuratDisposisi',
+            'as' => 'delete.surat-disposisi'
+        ]);
+
+        // Route::get('disposisi/delete/{id}', [
+        //     'uses' => 'SuratMasukController@deleteSuratDisposisi',
+        //     'as' => 'delete.disposisi'
+        // ]);
+
         Route::group(['middleware' => 'pengolah'], function () {
 
             Route::post('create', [
@@ -147,11 +157,6 @@ Route::group(['prefix' => '/'], function () {
             Route::put('disposisi/update/{id}', [
                 'uses' => 'SuratMasukController@updateSuratDisposisi',
                 'as' => 'update.surat-disposisi'
-            ]);
-
-            Route::get('disposisi/delete/{id}', [
-                'uses' => 'SuratMasukController@deleteSuratDisposisi',
-                'as' => 'delete.surat-disposisi'
             ]);
         });
 
