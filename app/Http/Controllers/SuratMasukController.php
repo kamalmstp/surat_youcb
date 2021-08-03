@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\JenisSurat;
+use App\Models\PerihalSurat;
 use App\Models\SuratDisposisi;
 use App\Models\SuratKeluar;
 use App\Models\SuratMasuk;
@@ -16,10 +17,11 @@ class SuratMasukController extends Controller
     {
         $masuks = SuratMasuk::orderByDesc('id')->get();
         $types = JenisSurat::all();
+        $perihal = PerihalSurat::all();
         $no_urut = str_pad(SuratMasuk::count() + 1, 3, '0', STR_PAD_LEFT);
         $findSurat = $request->q;
 
-        return view('surat.masuk', compact('masuks', 'types', 'no_urut', 'findSurat'));
+        return view('surat.masuk', compact('masuks', 'perihal', 'types', 'no_urut', 'findSurat'));
     }
 
     public function createSuratMasuk(Request $request)
@@ -27,7 +29,7 @@ class SuratMasukController extends Controller
         if ($request->hasfile('files')) {
             $this->validate($request, [
                 'files' => 'required|array',
-                'files.*' => 'mimes:jpg,jpeg,gif,png|max:5120'
+                'files.*' => 'mimes:jpg,jpeg,gif,png,docx,doc,pdf|max:5120'
             ]);
 
             $no_urut = str_pad(SuratMasuk::count() + 1, 3, '0', STR_PAD_LEFT);
@@ -42,12 +44,12 @@ class SuratMasukController extends Controller
 
             SuratMasuk::create([
                 'user_id' => Auth::id(),
-                'jenis_id' => $request->jenis_id,
+                'jenis_id' => 1,
+                'perihal_id' => $request->perihal_id,
                 'tgl_surat' => $request->tgl_surat,
                 'no_surat' => $request->no_surat,
                 'sifat_surat' => $request->sifat_surat,
                 'perihal' => $request->perihal,
-                'lampiran' => $request->lampiran . ' lembar',
                 'nama_instansi' => $request->nama_instansi,
                 'asal_instansi' => $request->asal_instansi,
                 'nama_pengirim' => $request->nama_pengirim,
@@ -131,7 +133,6 @@ class SuratMasukController extends Controller
                 if (count($surat->files) == count($request->fileSuratMasuks)) {
                     Storage::deleteDirectory('public/surat-masuk/' . $no_urut);
                     $surat->update(['files' => null]);
-
                 } else {
                     Storage::delete('public/surat-masuk/' . $no_urut . '/' . $file);
                     $surat->update(['files' => explode(", ", $data)]);
@@ -147,26 +148,27 @@ class SuratMasukController extends Controller
     {
         $sd = SuratDisposisi::create([
             'suratmasuk_id' => $request->sm_id,
-            'diteruskan_kepada' => $request->diteruskan_kepada,
+            'dari' => Auth::id(),
+            'kepada' => $request->kepada,
             'harapan' => $request->harapan,
             'catatan' => $request->catatan,
         ]);
         $sd->getSuratMasuk->update(['isDisposisi' => true]);
 
-        if ($sd->harapan == 'Buat Surat Balasan') {
-            SuratKeluar::create([
-                'user_id' => Auth::id(),
-                'jenis_id' => $sd->getSuratMasuk->jenis_id,
-                'suratdisposisi_id' => $sd->id,
-                'nama_penerima' => $sd->getSuratMasuk->nama_pengirim,
-                'kota_penerima' => $sd->getSuratMasuk->asal_instansi,
-                'no_surat' => substr($sd->getSuratMasuk->no_surat, 0, 3) . '/' .
-                    str_pad(SuratKeluar::count() + 1, 3, '0', STR_PAD_LEFT) .
-                    '/401.113/' . now()->format('Y'),
-                'sifat_surat' => $sd->getSuratMasuk->sifat_surat,
-                'status' => 0
-            ]);
-        }
+        // if ($sd->harapan == 'Buat Surat Balasan') {
+        //     SuratKeluar::create([
+        //         'user_id' => Auth::id(),
+        //         'jenis_id' => $sd->getSuratMasuk->jenis_id,
+        //         'suratdisposisi_id' => $sd->id,
+        //         'nama_penerima' => $sd->getSuratMasuk->nama_pengirim,
+        //         'kota_penerima' => $sd->getSuratMasuk->asal_instansi,
+        //         'no_surat' => substr($sd->getSuratMasuk->no_surat, 0, 3) . '/' .
+        //             str_pad(SuratKeluar::count() + 1, 3, '0', STR_PAD_LEFT) .
+        //             '/401.113/' . now()->format('Y'),
+        //         'sifat_surat' => $sd->getSuratMasuk->sifat_surat,
+        //         'status' => 0
+        //     ]);
+        // }
 
         return back()->with('success', 'Surat Masuk #' . $sd->getSuratMasuk->no_surat . ' berhasil didisposisi!');
     }
@@ -181,30 +183,11 @@ class SuratMasukController extends Controller
         $sd = SuratDisposisi::find($request->id);
         $sd->update([
             'suratmasuk_id' => $request->sm_id,
-            'diteruskan_kepada' => $request->diteruskan_kepada,
+            'dari' => Auth::id(),
+            'kepada' => $request->kepada,
             'harapan' => $request->harapan,
             'catatan' => $request->catatan,
         ]);
-        if ($sd->harapan == 'Buat Surat Balasan') {
-            SuratKeluar::create([
-                'user_id' => Auth::id(),
-                'jenis_id' => $sd->getSuratMasuk->jenis_id,
-                'suratdisposisi_id' => $sd->id,
-                'nama_penerima' => $sd->getSuratMasuk->nama_pengirim,
-                'kota_penerima' => $sd->getSuratMasuk->asal_instansi,
-                'no_surat' => substr($sd->getSuratMasuk->no_surat, 0, 3) . '/' .
-                    str_pad(SuratKeluar::count() + 1, 3, '0', STR_PAD_LEFT) .
-                    '/401.113/' . now()->format('Y'),
-                'sifat_surat' => $sd->getSuratMasuk->sifat_surat,
-                'status' => 0
-            ]);
-
-        } else {
-            $sk = SuratKeluar::where('suratdisposisi_id', $sd->id)->first();
-            if ($sk != "") {
-                $sk->delete();
-            }
-        }
 
         return back()->with('success', 'Disposisi Surat Masuk #' . $sd->getSuratMasuk->no_surat . ' berhasil diperbarui!');
     }

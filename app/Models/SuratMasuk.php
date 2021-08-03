@@ -22,6 +22,11 @@ class SuratMasuk extends Model
         return $this->belongsTo(JenisSurat::class, 'jenis_id');
     }
 
+    public function getPerihalSurat()
+    {
+        return $this->belongsTo(PerihalSurat::class, 'perihal_id');
+    }
+
     public function getSuratDisposisi()
     {
         return $this->hasOne(SuratDisposisi::class, 'suratmasuk_id');

@@ -305,7 +305,7 @@
             $notifications = count($nt_sm) + count($nt_sk);
 
         } elseif(Auth::user()->isKadin()){
-            $role = 'Rektor';
+            $role = 'KADIN';
             $nk_sm = \App\Models\SuratMasuk::where('isDisposisi', false)->get();
             $nk_sk = \App\Models\SuratKeluar::where('status', 1)->get();
             $notifications = count($nk_sm) + count($nk_sk);
