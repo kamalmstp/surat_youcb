@@ -76,7 +76,7 @@ class SuratKeluarController extends Controller
             $t4 = $klasifikasi->kode;
             $t5 = $sk->perihal;
             $t6 = $sk->kepada;
-            $t7 = $sk->isi;
+            $t7 = strip_tags($sk->isi);
             $t8 = $sk->tgl_surat;
             $t9 = $jabatan->nama_pejabat;
             $t10 = $jabatan->nidn;
@@ -151,12 +151,12 @@ class SuratKeluarController extends Controller
 
         } elseif (Auth::user()->isPengolah()) {
             $date = date('Y-m-d');
-            $jab = Jabatan::where('id', $request->jabatan_id);
-            $kla = PerihalSurat::where('id', $request->perihal_id);
-            $kd_jab = $jab->kode;
-            $kd_kla = $kla->kode;
-            $no_surat = $request->no_urut.'/'.$kd_jab.'/'.$kd_kla.'/'.date("Y");
-            // var_dump($no_surat);
+            $jab = Jabatan::find($request->jabatan_id);
+            $kla = PerihalSurat::find($request->perihal_id);
+            //$kd_jab = $jab['kode'];
+            //$kd_kla = $kla['kode'];
+            //$no_surat = $request->no_urut.'/'.$kd_jab.'/'.$kd_kla.'/'.date("Y");
+            var_dump($jab);
             $sk->update([
                 'nama_pengolah' => Auth::user()->name,
                 'tgl_surat' => $date,
@@ -166,7 +166,7 @@ class SuratKeluarController extends Controller
                 'kepada' => $request->kepada,
                 'perihal' => $request->perihal,
                 'isi' => $request->isi,
-                'no_surat' => $no_surat,
+                'no_surat' => 'isi',
                 'sifat_surat' => $request->sifat_surat,
                 'lampiran' => $request->lampiran . ' lembar',
                 'isi' => $request->isi,
