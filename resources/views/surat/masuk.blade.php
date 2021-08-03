@@ -189,8 +189,7 @@
                                                     <i class="fa fa-envelope"></i>&ensp;{{$masuk->isDisposisi == false ?
                                                 'BUAT DISPOSISI' : 'LIHAT DISPOSISI'}}
                                                 </button> -->
-                                        <a href="{{ route('disposisi',['id' => encrypt
-                                                            ($masuk->id)]) }}" type="button" class="btn btn-success btn-sm" style="font-weight: 600" {{$masuk->isDisposisi == false ? '' : 'disabled'}}>
+                                        <a href="{{ route('disposisi',['id' => encrypt($masuk->id)]) }}" type="button" class="btn btn-success btn-sm" style="font-weight: 600">
                                             <i class="fa fa-envelope"></i>&ensp;{{$masuk->isDisposisi == false ?
                                                 'BUAT DISPOSISI' : 'LIHAT DISPOSISI'}}
                                         </a>
@@ -204,7 +203,7 @@
                                                     <i class="fa fa-images"></i>&ensp;{{'Lihat Surat ('.$lbr.' lembar)'}}
                                                 </a>
                                             </li>
-                                            @if($masuk->isDisposisi == true)
+                                            <!-- @if($masuk->isDisposisi == true)
                                             <li>
                                                 <a onclick="disposisiSurat('{{$masuk->getSuratDisposisi->id}}',
                                                                     '{{$masuk->no_surat}}','update')">
@@ -216,7 +215,7 @@
                                                     <i class="fa fa-trash"></i>&ensp;Hapus Surat
                                                     Disposisi</a>
                                             </li>
-                                            @endif
+                                            @endif -->
                                         </ul>
                                     </div>
                                     @endif

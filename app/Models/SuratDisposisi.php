@@ -25,6 +25,16 @@ class SuratDisposisi extends Model
         return $this->belongsTo(Jabatan::class, 'kepada');
     }
 
+    public function getOleh()
+    {
+        return $this->belongsTo(User::class, 'oleh');
+    }
+
+    public function getTujuan()
+    {
+        return $this->belongsTo(User::class, 'tujuan');
+    }
+
     public function getSuratKeluar()
     {
         return $this->hasOne(SuratKeluar::class, 'suratdisposisi_id');

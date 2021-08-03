@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jabatan;
 use App\Models\JenisSurat;
 use App\Models\PerihalSurat;
 use App\Models\SuratDisposisi;
 use App\Models\SuratKeluar;
 use App\Models\SuratMasuk;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -146,13 +148,31 @@ class SuratMasukController extends Controller
 
     public function createSuratDisposisi(Request $request)
     {
-        $sd = SuratDisposisi::create([
-            'suratmasuk_id' => $request->sm_id,
-            'dari' => Auth::id(),
-            'kepada' => $request->kepada,
-            'harapan' => $request->harapan,
-            'catatan' => $request->catatan,
-        ]);
+        $user_id = Auth::id();
+        $kepada = $request->kepada;
+        $jbt = Jabatan::find($kepada);
+        $user = User::find($user_id);
+
+        if ($kepada == 0) {
+            $sd = SuratDisposisi::create([
+                'suratmasuk_id' => $request->sm_id,
+                'dari' => $user->jabatan_id,
+                'oleh' => $user_id,
+                'diteruskan_kepada' => 'Diarsipkan',
+                'harapan' => $request->harapan,
+                'catatan' => $request->catatan,
+            ]);
+        } else {
+            $sd = SuratDisposisi::create([
+                'suratmasuk_id' => $request->sm_id,
+                'dari' => $user->jabatan_id,
+                'oleh' => $user_id,
+                'kepada' => $kepada,
+                'tujuan' => $jbt->user_id,
+                'harapan' => $request->harapan,
+                'catatan' => $request->catatan,
+            ]);
+        }
         $sd->getSuratMasuk->update(['isDisposisi' => true]);
 
         // if ($sd->harapan == 'Buat Surat Balasan') {
@@ -196,7 +216,6 @@ class SuratMasukController extends Controller
     {
         $sd = SuratDisposisi::find(decrypt($id));
         $sd->delete();
-        $sd->getSuratMasuk->update(['isDisposisi' => false]);
 
         return back()->with('success', 'Disposisi Surat Masuk #' . $sd->getSuratMasuk->no_surat . ' berhasil dihapus!');
     }

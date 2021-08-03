@@ -77,7 +77,11 @@
                         </div> -->
                         <div class="pull-right">
                             <a href="{{ route('show.surat-masuk') }}" type="button" class="btn btn-default btn-sm"><i class="fa fa-arrow-circle-left"></i> Kembali</a>
+                            @if($masuk->status_surat == 'diarsipkan')
+                            <p></p>
+                            @else
                             <button type="button" class="btn btn-success btn-sm" onclick="disposisiSurat('{{$masuk->id}}','{{$masuk->no_surat}}','create')"><i class="fa fa-plus"></i> Tambah Disposisi</button>
+                            @endif
                         </div>
                     </div>
 
@@ -101,20 +105,25 @@
                             <tr>
                                 <td style="vertical-align: middle" align="center">{{$no++}}</td>
                                 <td>
-                                    <strong>
-                                        <p>{{$dsp->getDari->jabatan}}</p>
+                                    <strong>{{$dsp->getDari->jabatan}}
                                     </strong>
-                                    {{$dsp->getDari->nama_pejabat}}
+                                    <p>{{$dsp->getOleh->name}}</p>
                                 </td>
                                 <td>
+                                    @if($dsp->diteruskan_kepada == NULL)
                                     <strong>{{$dsp->getKepada->jabatan}}</strong>
-                                    <p>{{$dsp->getKepada->nama_pejabat}}</p>
+                                    <p>{{$dsp->getTujuan->name}}</p>
+                                    @else
+                                    <i>{{$dsp->diteruskan_kepada}}</i>
+                                    @endif
                                 </td>
                                 <td>
                                     {{$dsp->harapan}}
                                 </td>
                                 <td>{{$dsp->catatan}}</td>
-                                <td></td>
+                                <td>
+                                    <a href="{{route('delete.surat-disposisi',['id' => encrypt($dsp->id)])}}" type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -125,7 +134,7 @@
     </div>
 </div>
 
-@if(Auth::user()->isKadin())
+
 <div id="disposisiModal" class="modal fade">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -141,26 +150,25 @@
                 <div class="modal-body">
                     <div class="row form-group">
                         <div class="col-lg-12">
-                            <label for="diteruskan_kepada">Diteruskan kepada Saudara: <span class="required">*</span></label>
+                            <span><input type="radio" class="flat" name="type" id="diteruskan_kepada" checked></span><label for="diteruskan_kepada">Diteruskan kepada Saudara: <span class="required"></span></label>
                             <!-- <textarea id="diteruskan_kepada" name="diteruskan_kepada" class="use-tinymce"></textarea> -->
-
                             <div class="input-group">
-                                <select name="kepada" id="kepada" class="form-control" required>
+                                <select name="kepada" id="kepada" class="form-control">
                                     <option value="">--Diteruskan Kepada--</option>
                                     @foreach($jabatan as $jbt)
                                     <option value="{{$jbt->id}}">{{$jbt->jabatan}}</option>
                                     @endforeach
                                 </select>
                             </div>
-
+                            <span><input type="radio" class="flat" name="type" value="0" id="kepada"></span><label for="kepada"> Arsipkan</label>
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-lg-5">
-                            <label for="harapan">Dengan hormat harap: <span class="required">*</span></label>
+                            <label for="harapan">Dengan hormat harap: </label>
                             <div class="input-group">
                                 <span class="input-group-addon">
-                                    <input id="rb_ts" type="radio" class="flat" name="rb_harapan" required></span>
+                                    <input id="rb_ts" type="radio" class="flat" name="rb_harapan"></span>
                                 <input id="txt_ts" class="form-control" type="text" name="harapan" value="Tanggapan dan Saran" disabled>
                             </div>
                             <div class="input-group">
@@ -201,7 +209,7 @@
         </div>
     </div>
 </div>
-@endif
+
 @endsection
 @push("scripts")
 <script>
