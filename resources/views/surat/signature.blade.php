@@ -45,7 +45,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Surat Keluar
+                    <h2>Signature Online
                         <small id="panel_subtitle">List</small>
                     </h2>
                     <ul class="nav navbar-right panel_toolbox">
@@ -60,232 +60,19 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Detail Surat</th>
+                                <th>File Surat</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @php $no = 1; @endphp
-                            @foreach($keluars as $keluar)
-                            @php
-                            if($keluar->sifat_surat == 'rahasia'){
-                            $label = 'danger';
-                            } elseif($keluar->sifat_surat == 'sangat segera'){
-                            $label = 'primary';
-                            } elseif($keluar->sifat_surat == 'segera'){
-                            $label = 'info';
-                            } elseif($keluar->sifat_surat == 'penting'){
-                            $label = 'warning';
-                            } else {
-                            $label = 'default';
-                            }
-                            $lbr = $keluar->files != "" ? count($keluar->files) : 0;
-                            $index = substr($keluar->no_surat,4,3);
-                            @endphp
                             <tr>
                                 <td style="vertical-align: middle" align="center">{{$no++}}</td>
-                                <td style="vertical-align: middle">
-                                    <table>
-                                        <tr>
-                                            <td><i class="fa fa-calendar-check"></i>&nbsp;</td>
-                                            <td>Tanggal Pengajuan</td>
-                                            <td>&nbsp;:&nbsp;</td>
-                                            <td>{{\Carbon\Carbon::parse($keluar->created_at)->format('l, j F Y - h:i:s')}}
-                                                <span style="color: #fa5555">({{\Carbon\Carbon::parse($keluar->created_at)->diffForHumans()}})</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><i class="fa fa-hashtag"></i>&nbsp;</td>
-                                            <td>Nomor Surat</td>
-                                            <td>&nbsp;:&nbsp;</td>
-                                            <td>{{$keluar->no_surat != null ? $keluar->no_surat : '(kosong)'}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><i class="fa fa-calendar-alt"></i>&nbsp;</td>
-                                            <td>Tanggal Surat</td>
-                                            <td>&nbsp;:&nbsp;</td>
-                                            <td>{{$keluar->tgl_surat != null ? \Carbon\Carbon::parse($keluar
-                                                ->tgl_surat)->format('j F Y') : '(kosong)'}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><i class="fa fa-thumbtack"></i>&nbsp;</td>
-                                            <td>Jenis Surat</td>
-                                            <td>&nbsp;:&nbsp;</td>
-                                            <td>{{$keluar->getJenisSurat->jenis}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><i class="fa fa-user-tie"></i>&nbsp;</td>
-                                            <td>Penerima</td>
-                                            <td>&nbsp;:&nbsp;</td>
-                                            <td>{{$keluar->nama_penerima != "" ? $keluar->nama_penerima.' - '.$keluar->kota_penerima : '(kosong)'}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><i class="fa fa-comments"></i>&nbsp;</td>
-                                            <td>Perihal</td>
-                                            <td>&nbsp;:&nbsp;</td>
-                                            <td>{{$keluar->perihal != "" ? $keluar->perihal : '(kosong)'}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><i class="fa fa-file-image"></i>&nbsp;</td>
-                                            <td>Lampiran</td>
-                                            <td>&nbsp;:&nbsp;</td>
-                                            <td>{{$keluar->lampiran != "" ? $keluar->lampiran : '(kosong)'}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><i class="fa fa-tag"></i>&nbsp;</td>
-                                            <td>Sifat Surat</td>
-                                            <td>&nbsp;:&nbsp;</td>
-                                            <td style="text-transform: uppercase">
-                                                <span class="label label-{{$label}}">
-                                                    {{$keluar->sifat_surat != null ? $keluar->sifat_surat : '(kosong)'}}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td style="vertical-align: middle" align="center">
-                                    <ul class="stepped-progress-bar">
-                                        <li data-html="true" data-toggle="tooltip" data-original-title="Ditangani Pegawai:<br>{{$keluar->nama_pengolah}}" class="{{$keluar->status == 0 ? 'active' : ''}}">Diproses
-                                        </li>
-                                        @if($keluar->status == 1)
-                                        <li data-html="true" data-toggle="tooltip" data-original-title="Ditangani REKTOR:<br>{{\App\Models\User::where('role', \App\Support\Role::KADIN)->first()->name}}" class="active">Menunggu Validasi
-                                        </li>
-                                        @elseif($keluar->status == 2)
-                                        <li data-html="true" data-toggle="tooltip" data-original-title="Ditangani REKTOR:<br>{{\App\Models\User::where('role', \App\Support\Role::KADIN)->first()->name}}" class="invalid">Tidak Valid
-                                        </li>
-                                        @else
-                                        <li data-html="true" data-toggle="tooltip" data-original-title="Ditangani REKTOR:<br>{{\App\Models\User::where('role', \App\Support\Role::KADIN)->first()->name}}" class="{{$keluar->status == 3 ? 'active' : ''}}">Valid
-                                        </li>
-                                        @endif
-                                        <li data-html="true" data-toggle="tooltip" data-original-title="Ditangani TU:<br>{{$keluar->status == 4 ? $keluar->getAgendaKeluar->nama_tu : '-'}}" class="{{$keluar->status == 4 ? 'active' : ''}}">Surat Siap Diambil
-                                        </li>
-                                        <li data-html="true" data-toggle="tooltip" data-original-title="Ditangani {{$keluar->status == 5 ? $keluar->getUser->role == \App\Support\Role::KADIN ? 'KADIN' : 'Pegawai' : '-'}}:<br>{{$keluar->status == 5 ? $keluar->getUser->name : '-'}}" class="{{$keluar->status == 5 ? 'active' : ''}}">Surat Sudah Diambil
-                                        </li>
-                                    </ul>
-                                </td>
-                                <td style="vertical-align: middle" align="center">
-                                    @if(Auth::user()->isPegawai())
-                                    <div class="btn-group">
-                                        @if($keluar->status == 0 && $keluar->user_id == Auth::id())
-                                        <button onclick='editSuratKeluar("{{$keluar->id}}")' type="button" class="btn btn-warning btn-sm" style="font-weight: 600">
-                                            <i class="fa fa-edit"></i>&ensp;BUAT SURAT
-                                        </button>
-                                        @else
-                                        <button onclick='konfirmasiSuratKeluar("{{$keluar->id}}",
-                                                            "{{$keluar->no_surat}}")' type="button" class="btn btn-success btn-sm" style="font-weight: 600" {{$keluar->status == 0 || $keluar->status == 1 ||
-                                                            $keluar->status == 2 || $keluar->status == 3 ||
-                                                            $keluar->status == 5 ? 'disabled' : ''}}>
-                                            {{$keluar->status == 5 ? 'TERKONFIRMASI' : 'KONFIRMASI'}}
-                                        </button>
-                                        @endif
-                                        <button type="button" class="btn btn-{{$keluar->status == 0 &&
-                                                $keluar->user_id == Auth::id() ? 'warning' : 'success'}} btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                            <span class="caret"></span>
-                                            <span class="sr-only">Toggle Dropdown</span>
-                                        </button>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li>
-                                                @if($keluar->status == 0 || $keluar->status >= 4)
-                                                <a onclick='lihatSurat("{{$keluar->id}}", "keluar",
-                                                                    "{{$lbr}}", "{{$index}}")'>
-                                                    <i class="fa fa-images"></i>&ensp;{{'Lihat Surat ('.$lbr.
-                                                                ' lembar)'}}
-                                                </a>
-                                                @else
-                                                <a href="{{route('pdf.surat-keluar', ['id' => encrypt
-                                                            ($keluar->id)])}}" target="_blank">
-                                                    <i class="fa fa-file-pdf"></i>&ensp;Lihat Surat
-                                                </a>
-                                                @endif
-                                            </li>
-                                            @if($keluar->status == 0 && $keluar->user_id == Auth::id())
-                                            <li>
-                                                <a href="{{route('delete.surat-keluar',['id' => encrypt
-                                                            ($keluar->id)])}}" class="delete-surat">
-                                                    <i class="fa fa-trash"></i>&ensp;Hapus Surat
-                                                </a>
-                                            </li>
-                                            @endif
-                                        </ul>
-                                    </div>
-                                    @elseif(Auth::user()->isPengolah())
-                                    <div class="btn-group">
-                                        <button onclick='editSuratKeluar("{{$keluar->id}}")' type="button" class="btn btn-warning btn-sm" style="font-weight: 600" {{$keluar->status == 0 || $keluar->status == 1 ||
-                                                        $keluar->status == 3 ? '' : 'disabled'}}>
-                                            <i class="fa fa-edit"></i>&ensp;EDIT
-                                        </button>
-                                        <button type="button" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                            <span class="caret"></span>
-                                            <span class="sr-only">Toggle Dropdown</span>
-                                        </button>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li>
-                                                @if($keluar->status == 0 || $keluar->status >= 4)
-                                                <a onclick='lihatSurat("{{$keluar->id}}", "keluar",
-                                                                    "{{$lbr}}", "{{$index}}")'>
-                                                    <i class="fa fa-images"></i>&ensp;{{'Lihat Surat ('.$lbr.
-                                                                ' lembar)'}}
-                                                </a>
-                                                @else
-                                                <a href="{{route('pdf.surat-keluar', ['id' => encrypt
-                                                            ($keluar->id)])}}" target="_blank">
-                                                    <i class="fa fa-file-pdf"></i>&ensp;Lihat Surat
-                                                </a>
-                                                <a href="{{route('word.surat-keluar', ['id' => encrypt
-                                                            ($keluar->id)])}}" target="_blank">
-                                                    <i class="fa fa-file-word"></i>&ensp;Generate Surat
-                                                </a>
-                                                @endif
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    @elseif(Auth::user()->isKadin())
-                                    <div class="btn-group">
-                                        @if($keluar->status == 0 && $keluar->user_id == Auth::id())
-                                        <button onclick='editSuratKeluar("{{$keluar->id}}")' type="button" class="btn btn-warning btn-sm" style="font-weight: 600">
-                                            <i class="fa fa-edit"></i>&ensp;EDIT
-                                        </button>
-                                        @else
-                                        <button onclick='validasiSuratKeluar("{{$keluar->id}}")' type="button" class="btn btn-success btn-sm" style="font-weight: 600" {{$keluar->status == 1 ? '' : 'disabled'}}>
-                                            <i class="fa fa-edit"></i>&ensp;{{$keluar->status != 1 ?
-                                                        'TERVALIDASI' : 'VALIDASI'}}
-                                        </button>
-                                        @endif
-                                        <button type="button" class="btn btn-{{$keluar->status == 0 &&
-                                                $keluar->user_id == Auth::id() ? 'warning' : 'success'}} btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                            <span class="caret"></span>
-                                            <span class="sr-only">Toggle Dropdown</span>
-                                        </button>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li>
-                                                @if($keluar->status == 0 || $keluar->status >= 4)
-                                                <a onclick='lihatSurat("{{$keluar->id}}", "keluar",
-                                                                    "{{$lbr}}", "{{$index}}")'>
-                                                    <i class="fa fa-images"></i>&ensp;{{'Lihat Surat ('.$lbr.
-                                                                ' lembar)'}}
-                                                </a>
-                                                @else
-                                                <a href="{{route('pdf.surat-keluar', ['id' => encrypt
-                                                            ($keluar->id)])}}" target="_blank">
-                                                    <i class="fa fa-file-pdf"></i>&ensp;Lihat Surat
-                                                </a>
-                                                @endif
-                                            </li>
-                                            @if($keluar->status == 0 && $keluar->user_id == Auth::id())
-                                            <li>
-                                                <a href="{{route('delete.surat-keluar',['id' => encrypt
-                                                            ($keluar->id)])}}" class="delete-surat">
-                                                    <i class="fa fa-trash"></i>&ensp;Hapus Surat
-                                                </a>
-                                            </li>
-                                            @endif
-                                        </ul>
-                                    </div>
-                                    @endif
-                                </td>
+                                <td style="vertical-align: middle"></td>
+                                <td style="vertical-align: middle" align="center"></td>
+                                <td style="vertical-align: middle" align="center"></td>
                             </tr>
-                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -293,94 +80,8 @@
                     <form method="post" action="{{route('create.surat-keluar')}}" id="form-sk">
                         {{csrf_field()}}
                         <input type="hidden" name="_method">
-                        @if(Auth::user()->isPegawai())
-                        <div class="row form-group">
-                            <div class="col-lg-12">
-                                <label for="jenis_id">Jenis Surat <span class="required">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-thumbtack"></i></span>
-                                    <select id="jenis_id" class="form-control selectpicker" title="-- Pilih Jenis Surat --" data-live-search="true" name="jenis_id" data-max-options="1" multiple required>
-                                        @foreach($types as $type)
-                                        <option value="{{$type->id}}">{{$type->jenis}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="row form-group">
-                            <div class="col-lg-12">
-                                <label for="perihal">Perihal/Keterangan Surat <span class="required">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-comments"></i></span>
-                                    <textarea id="perihal" class="form-control" type="text" name="perihal" placeholder="Perihal" required></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <div class="col-lg-12 no_surat_penerima" style="display: none">
-                                <label for="no_surat_penerima">Nomor Surat Penerima (PIHAK KEDUA)
-                                    <span class="required">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-hashtag"></i></span>
-                                    <input id="no_surat_penerima" class="form-control" name="no_surat_penerima" type="text" placeholder="Nomor surat penerima / pihak kedua" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row form-group penerima">
-                            <div class="col-lg-7">
-                                <label for="nama_instansi">Nama Instansi Penerima <span class="required">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-university"></i></span>
-                                    <input id="nama_instansi" placeholder="Nama instansi penerima" type="text" class="form-control" name="instansi_penerima" required>
-                                </div>
-                            </div>
-                            <div class="col-lg-5">
-                                <label for="kota">Asal Instansi Penerima <span class="required">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-map-marked-alt"></i></span>
-                                    <input id="kota" placeholder="Asal instansi penerima" type="text" class="form-control" name="kota_penerima" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row form-group penerima">
-                            <div class="col-lg-7">
-                                <label for="nama">Nama Penerima <span class="required">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-user-tie"></i></span>
-                                    <input id="nama" placeholder="Nama lengkap penerima" type="text" class="form-control" name="nama_penerima" required>
-                                </div>
-                            </div>
-                            <div class="col-lg-5">
-                                <label for="nip">NIP Penerima </label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-id-card"></i></span>
-                                    <input id="nip" placeholder="NIP penerima" type="text" class="form-control" name="nip_penerima" onkeypress="return numberOnly(event, false)">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row form-group penerima">
-                            <div class="col-lg-7">
-                                <label for="jabatan">Jabatan Penerima </label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
-                                    <input id="jabatan" placeholder="Jabatan penerima" type="text" class="form-control" name="jabatan_penerima">
-                                </div>
-                            </div>
-                            <div class="col-lg-5">
-                                <label for="pangkat">Pangkat Penerima</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="fa fa-id-badge"></i></span>
-                                    <input id="pangkat" placeholder="Pangkat penerima" type="text" class="form-control" name="pangkat_penerima">
-                                </div>
-                            </div>
-                        </div>
-
-                        @elseif(Auth::user()->isPengolah())
+                        @if(Auth::user()->isPengolah())
                         <div class="col-lg-12 alert alert-danger" style="display: none;background-color: #f2dede;border-color: #ebccd1;color: #a94442;">
                             <strong>INVALID!</strong> &mdash; <span id="stats_invalid"></span>
                         </div>
@@ -392,6 +93,22 @@
                                     <input id="no_urut" class="form-control" type="text" name="no_urut" placeholder="Nomor Urut">
                                 </div>
                             </div>
+                            <!-- <div class="col-lg-7 no_surat">
+                                        <label for="no_surat">Nomor Surat <span class="required">*</span></label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-hashtag"></i></span>
+                                            <input id="no_surat" class="form-control" type="text" name="no_surat"
+                                                   placeholder="kode_perihal/nomor_urut/kode_instansi/tahun" required>
+                                        </div>
+                                    </div> -->
+                            <!-- <div class="col-lg-5 tgl_surat">
+                                        <label for="tgl_surat">Tanggal Surat <span class="required">*</span></label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-calendar-alt"></i></span>
+                                            <input id="tgl_surat" class="form-control datepicker" type="text"
+                                                   name="tgl_surat" placeholder="yyyy-mm-dd" required>
+                                        </div>
+                                    </div> -->
                         </div>
 
                         <div class="row form-group">
@@ -637,7 +354,8 @@
         $("#btn_create i").toggleClass('fa-plus fa-th-list');
         $("#btn_sk_submit").html("<strong>SUBMIT</strong>");
         $("#form-sk input[name=_method]").val('');
-        $("#form-sk").attr('action', '{{route("create.surat-keluar")}}');
+        $("#form-sk").attr('action', '{{route('
+            create.surat - keluar ')}}');
 
         $("#btn_create[data-toggle=tooltip]").attr('data-original-title', function(i, v) {
             return v === "Ajukan Surat" ? "Daftar Surat" : "Ajukan Surat";
@@ -704,16 +422,16 @@
         mask: "9{1,2} (a{3,25})"
     });
 
-    <?php if (Auth::user()->isPengolah()) { ?>
-        $("#form-sk").on("submit", function(e) {
-            e.preventDefault();
-            if (tinyMCE.get('isi').getContent() == "") {
-                swal('PERHATIAN!', 'Kolom isi surat harus diisi!', 'warning');
-            } else {
-                $(this)[0].submit();
-            }
-        });
-    <?php } ?>
+    @if(Auth::user() - > isPengolah())
+    $("#form-sk").on("submit", function(e) {
+        e.preventDefault();
+        if (tinyMCE.get('isi').getContent() == "") {
+            swal('PERHATIAN!', 'Kolom isi surat harus diisi!', 'warning');
+        } else {
+            $(this)[0].submit();
+        }
+    });
+    @endif
 
     $(".delete-surat").on("click", function() {
         var linkURL = $(this).attr("href");
@@ -742,7 +460,10 @@
         $("#btn_create i").toggleClass('fa-plus fa-th-list');
         $("#btn_sk_submit").html("<strong>SIMPAN PERUBAHAN</strong>");
         $("#form-sk input[name=_method]").val('PUT');
-        $("#form-sk").attr('action', '{{route("update.surat-keluar", ["id" => ""])}}/' + id);
+        $("#form-sk").attr('action', '{{route('
+            update.surat - keluar ', ['
+            id ' => '
+            '])}}/' + id);
 
         $("#btn_create[data-toggle=tooltip]").attr('data-original-title', function(i, v) {
             return v === "Ajukan Surat" ? "Daftar Surat" : "Ajukan Surat";
@@ -754,7 +475,10 @@
         $(".tgl_surat").removeClass('col-lg-12').addClass('col-lg-5');
         $(".jenis_id, .perihal").removeClass('col-lg-12').addClass('col-lg-7');
 
-        $.get('{{route("edit.surat-keluar", ["id" => ""])}}/' + id,
+        $.get('{{route('
+            edit.surat - keluar ', ['
+            id ' => '
+            '])}}/' + id,
             function(data) {
                 if (data.jenis_id == 4 || data.jenis_id == 8 || data.jenis_id == 13 || data.jenis_id == 14 ||
                     data.jenis_id == 17 || data.jenis_id == 18 || data.jenis_id == 19 || data.jenis_id == 22 ||
@@ -816,23 +540,23 @@
                 $("#nip").val(data.nip_penerima);
                 $("#jenis_id").val(data.jenis_id).selectpicker('refresh');
 
-                <?php if (Auth::user()->isPengolah()) { ?>
-                    $("#no_surat").val(data.no_surat);
-                    $("#tgl_surat").val(data.tgl_surat);
-                    $("#lampiran").val(data.lampiran);
-                    if (data.sifat_surat != null) {
-                        $("#" + data.sifat_surat.replace(/\s/g, "_")).iCheck('check');
-                    }
-                    if (data.isi != "") {
-                        tinyMCE.get('isi').setContent(data.isi);
-                    }
-                    if (data.tembusan != "") {
-                        tinyMCE.get('tembusan').setContent(data.tembusan);
-                    }
-                    if (data.status == 3) {
-                        $("#stats_invalid").text(data.catatan).parent().show(300);
-                    }
-                <?php } ?>
+                @if(Auth::user() - > isPengolah())
+                $("#no_surat").val(data.no_surat);
+                $("#tgl_surat").val(data.tgl_surat);
+                $("#lampiran").val(data.lampiran);
+                if (data.sifat_surat != null) {
+                    $("#" + data.sifat_surat.replace(/\s/g, "_")).iCheck('check');
+                }
+                if (data.isi != "") {
+                    tinyMCE.get('isi').setContent(data.isi);
+                }
+                if (data.tembusan != "") {
+                    tinyMCE.get('tembusan').setContent(data.tembusan);
+                }
+                if (data.status == 3) {
+                    $("#stats_invalid").text(data.catatan).parent().show(300);
+                }
+                @endif
             });
     }
 
@@ -859,7 +583,10 @@
             }
         });
 
-        $.get('{{route("edit.surat-keluar", ["id" => ""])}}/' + id,
+        $.get('{{route('
+            edit.surat - keluar ', ['
+            id ' => '
+            '])}}/' + id,
             function(data) {
                 $("#validasiModal .modal-title").html('Validasi Surat Keluar #<strong>' + data.no_surat + '</strong>');
                 $("#btn_validasi_submit").html("<strong>" + data.status == 2 ? 'SIMPAN PERUBAHAN' : 'SUBMIT' + "</strong>");
@@ -872,7 +599,10 @@
                 }
             });
 
-        $("#form-validasi").attr('action', '{{route("update.surat-keluar", ["id" => ""])}}/' + id);
+        $("#form-validasi").attr('action', '{{route('
+            update.surat - keluar ', ['
+            id ' => '
+            '])}}/' + id);
         $("#validasiModal").modal('show');
     }
 
@@ -888,7 +618,10 @@
             showLoaderOnConfirm: true,
             preConfirm: function() {
                 return new Promise(function(resolve) {
-                    window.location.href = '{{route("confirm.surat-keluar", ["id" => ""])}}/' + id;
+                    window.location.href = '{{route('
+                    confirm.surat - keluar ', ['
+                    id ' => '
+                    '])}}/' + id;
                 });
             },
             allowOutsideClick: false

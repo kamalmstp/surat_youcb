@@ -87,6 +87,11 @@ Route::group(['prefix' => '/'], function () {
         'as' => 'get.perihalSurat'
     ]);
 
+    Route::get('signature', [
+        'uses' => 'SignatureController@showSignature',
+        'as' => 'show.signature'
+    ]);
+
     Route::group(['prefix' => 'surat_masuk'], function () {
 
         Route::get('/', [
@@ -144,10 +149,6 @@ Route::group(['prefix' => '/'], function () {
         });
 
         Route::group(['middleware' => 'kadin'], function () {
-
-
-
-
 
             Route::get('disposisi/edit/{id}', [
                 'uses' => 'SuratMasukController@editSuratDisposisi',
