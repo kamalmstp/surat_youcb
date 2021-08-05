@@ -79,9 +79,8 @@ class SuratKeluarController extends Controller
             $t9 = $jabatan->nama_pejabat;
             $t10 = $jabatan->nidn;
 
-            $nama_file = public_path('surat/tmp/Surat Edaran ' . $jabatan->jabatan . ' ' . $sk->tgl_surat . '.docx');
-            $text_qr = 'Nomor Surat : ' . $t2 . '/' . $t3 . '/' . $t4 . '/2021 <br> Tgl Surat : ' . $sk->tgl_surat . ' <br>Penandatangan : ' . $t9 . '<br> File Surat : ' . $nama_file;
-
+            $path = 'surat/tmp/Surat Edaran ' . $jabatan->jabatan . ' ' . $sk->tgl_surat . '.docx';
+            $text_qr = 'Nomor Surat : ' . $t2 . '/' . $t3 . '/' . $t4 . '/2021 <br> Tgl Surat : ' . $sk->tgl_surat . ' <br>Penandatangan : ' . $t9 . '<br> File Surat : https://siap.youcb.ac.id/' . $path;
             \QrCode::size(100)->format('png')->generate($text_qr, public_path('surat/qr/qr.png'));
 
             $document->setValues(array(
@@ -99,7 +98,7 @@ class SuratKeluarController extends Controller
             ));
             $document->setImageValue('QR', public_path('surat/qr/qr.png'));
 
-
+            $nama_file = public_path($path);
             // SuratKeluar::create([
 
             // ]);
