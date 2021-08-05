@@ -79,10 +79,9 @@ class SuratKeluarController extends Controller
             $t9 = $jabatan->nama_pejabat;
             $t10 = $jabatan->nidn;
 
-            $nama_file = public_path('surat/tmp/Surat Edaran ' . $jabatan->jabatan . ' ' . $sk->tgl_surat . '.docx');
-            $text_qr = 'Nomor Surat : ' . $t2 . '/' . $t3 . '/' . $t4 . '/2021 <br> Tgl Surat : ' . $sk->tgl_surat . ' <br>Penandatangan : ' . $t9 . '<br> File Surat : ' . $nama_file;
-
-            \QrCode::size(100)->format('png')->generate($text_qr, public_path('surat/qr/qr.png'));
+            $path = 'surat/tmp/Surat-Edaran-' . $jabatan->jabatan . '-' . $sk->tgl_surat . '.docx';
+            $text_qr = 'Nomor Surat : ' . $t2 . '/' . $t3 . '/' . $t4 . '/2021    File Surat : https://siap.youcb.ac.id/' . $path;
+            \QrCode::size(500)->format('png')->merge('https://siap.youcb.ac.id/surat/logo-black.png', .3, true)->generate($text_qr, public_path('surat/qr/qr.png'));
 
             $document->setValues(array(
                 'JABATAN' => $t1,
@@ -99,7 +98,7 @@ class SuratKeluarController extends Controller
             ));
             $document->setImageValue('QR', public_path('surat/qr/qr.png'));
 
-
+            $nama_file = public_path($path);
             // SuratKeluar::create([
 
             // ]);
@@ -153,21 +152,12 @@ class SuratKeluarController extends Controller
             return back()->with('success', 'Surat keluar (' . $sk->getJenisSurat->jenis . ') berhasil diperbarui!');
         } elseif (Auth::user()->isPengolah()) {
             $date = date('Y-m-d');
-<<<<<<< HEAD
-            $jab = Jabatan::find($request->jabatan_id);
-            $kla = PerihalSurat::find($request->perihal_id);
-            //$kd_jab = $jab['kode'];
-            //$kd_kla = $kla['kode'];
-            //$no_surat = $request->no_urut.'/'.$kd_jab.'/'.$kd_kla.'/'.date("Y");
-            var_dump($jab);
-=======
             // $jab = Jabatan::where('id', $request->jabatan_id)->get();
             // $kla = PerihalSurat::where('id', $request->perihal_id)->get();
             // $kd_jab = $jab->kode;
             // $kd_kla = $kla->kode;
             // $no_surat = $request->no_urut . '/' . $kd_jab . '/' . $kd_kla . '/' . date("Y");
             // var_dump($no_surat);
->>>>>>> bc683187d89494fa13a4243d22ac7f45891ff2bd
             $sk->update([
                 'nama_pengolah' => Auth::user()->name,
                 'tgl_surat' => $date,
@@ -177,11 +167,7 @@ class SuratKeluarController extends Controller
                 'kepada' => $request->kepada,
                 'perihal' => $request->perihal,
                 'isi' => $request->isi,
-<<<<<<< HEAD
-                'no_surat' => 'isi',
-=======
                 'no_surat' => 'fdfd',
->>>>>>> bc683187d89494fa13a4243d22ac7f45891ff2bd
                 'sifat_surat' => $request->sifat_surat,
                 'lampiran' => $request->lampiran . ' lembar',
                 'isi' => $request->isi,
